@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    USER_NOT_FOUND(404, "User not found", HttpStatus.NOT_FOUND),
     USER_EXISTED(400, "User existed", HttpStatus.BAD_REQUEST),
-    USER_NOT_EXISTED(400, "User not existed", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
     ACCESS_DINED(403, "Access denied", HttpStatus.FORBIDDEN),
     TOKEN_INVALID(400, "Token invalid", HttpStatus.BAD_REQUEST),
