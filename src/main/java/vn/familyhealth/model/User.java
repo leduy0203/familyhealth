@@ -3,6 +3,9 @@ package vn.familyhealth.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
+import vn.familyhealth.common.Gender;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
@@ -13,9 +16,18 @@ import lombok.*;
 @NoArgsConstructor
 public class User extends AbstractEntity<Long> {
 
-    private String username;
+    private String email;
 
     private String password;
 
-    private String email;
+    private String phone;
+
+    private String fullName;
+
+    private String address;
+
+    private Gender gender;
+
+    private LocalDateTime dateOfBirth;
+
 }

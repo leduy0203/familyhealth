@@ -7,7 +7,7 @@ public class UserMapper {
 
     public static UserDTO userDTO(User user){
         return UserDTO.builder()
-                .username(user.getUsername())
+                .username(user.getEmail())
                 .password(user.getEmail())
                 .build();
     }
