@@ -10,12 +10,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import vn.familyhealth.model.dto.response.ErrorResponse;
 
 import java.util.Date;
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -39,7 +41,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
     }
 
-    @ExceptionHandler(value = AppException.class)
+    @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorResponse> handleIdentityException(AppException exception, HttpServletRequest request) {
         log.error(exception.getMessage(), exception);
 
@@ -48,11 +50,11 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(new Date())
                 .status(errorCode.getCode())
-                .error(errorCode.getHttpStatus().getReasonPhrase())
+                .error(errorCode.getHttpStatus().name())
                 .message(errorCode.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
 }
