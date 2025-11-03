@@ -19,7 +19,6 @@ public class UserMapper {
                 .password(userRequestDTO.getPassword())
                 .fullName(userRequestDTO.getFullName())
                 .phone(userRequestDTO.getPhone())
-                .address(userRequestDTO.getAddress())
                 .build();
     }
 
