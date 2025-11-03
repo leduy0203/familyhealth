@@ -1,19 +1,17 @@
 package vn.familyhealth.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "role")
-@Getter
-@Setter
-@Builder
+@Table(name = "roles")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends AbstractEntity<Integer> {
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
-
-    private String description;
 }
