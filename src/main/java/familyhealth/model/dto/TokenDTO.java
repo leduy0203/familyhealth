@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/main/java/familyhealth/model/dto/TokenDTO.java
 package familyhealth.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,4 +35,9 @@ public class TokenDTO {
     @NotNull(message = "User ID không được null")
     @JsonProperty("user_id")
     private Long userId;
+=======
+package vn.familyhealth.model.dto;
+
+public class TokenDTO {
+>>>>>>> f3ef2a1816e0a6ceed82d37f450c23fd4ce4c822:src/main/java/vn/familyhealth/model/dto/TokenDTO.java
 }
