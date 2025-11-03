@@ -1,13 +1,12 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /familyhealth
 spring:
-  application:
-    name: FamilyHealth
-
   datasource:
     url: jdbc:mysql://localhost:3306/familyhealth
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    username: root
+    password:
   jpa:
     hibernate:
       ddl-auto: update
