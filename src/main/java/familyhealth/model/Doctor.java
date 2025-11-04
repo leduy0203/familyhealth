@@ -1,4 +1,4 @@
-package vn.familyhealth.model;
+package familyhealth.model;
 
 import jakarta.persistence.*;
 import lombok.*;

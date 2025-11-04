@@ -1,0 +1,29 @@
+package familyhealth.model.dto;
+
+import com.fasterxml.jackson.annotation.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import familyhealth.common.Relation;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MemberDTO {
+    @NotNull(message = "Relation không được null")
+    @JsonProperty("relation")
+    private Relation relation;
+
+    @NotBlank(message = "BHYT không được để trống")
+    @Size(max = 12, message = "BHYT tối đa 12 ký tự")
+    @JsonProperty("bhyt")
+    private String bhyt;
+
+    @NotNull(message = "Household ID không được null")
+    @JsonProperty("household_id")
+    private Long householdId;
+
+    @NotNull(message = "User ID không được null")
+    @JsonProperty("user_id")
+    private Long userId;
+}
