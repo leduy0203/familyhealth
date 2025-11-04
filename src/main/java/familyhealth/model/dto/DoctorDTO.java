@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/main/java/familyhealth/model/dto/DoctorDTO.java
 package familyhealth.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,9 +27,5 @@ public class DoctorDTO {
     @NotNull(message = "User ID không được null")
     @JsonProperty("user_id")
     private Long userId;
-=======
-package vn.familyhealth.model.dto;
 
-public class DoctorDTO {
->>>>>>> f3ef2a1816e0a6ceed82d37f450c23fd4ce4c822:src/main/java/vn/familyhealth/model/dto/DoctorDTO.java
 }

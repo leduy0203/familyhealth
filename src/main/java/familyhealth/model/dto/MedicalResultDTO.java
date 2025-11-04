@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/main/java/familyhealth/model/dto/MedicalResultDTO.java
 package familyhealth.model.dto;
 
 import com.fasterxml.jackson.annotation.*;
@@ -33,9 +32,3 @@ public class MedicalResultDTO {
     @JsonProperty("appointment_id")
     private Long appointmentId;
 }
-=======
-package vn.familyhealth.model.dto;
-
-public class MedicalResultDTO {
-}
->>>>>>> f3ef2a1816e0a6ceed82d37f450c23fd4ce4c822:src/main/java/vn/familyhealth/model/dto/MedicalResultDTO.java

@@ -2,8 +2,7 @@ package vn.familyhealth.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import vn.familyhealth.common.Expertise;
+import familyhealth.common.Expertise;
 
 @Entity
 @Table(name = "doctors")

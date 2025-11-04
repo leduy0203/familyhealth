@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/main/java/familyhealth/model/dto/AppointmentDTO.java
 package familyhealth.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -37,9 +36,4 @@ public class AppointmentDTO {
     @NotNull(message = "Member ID không được null")
     @JsonProperty("member_id")
     private Long memberId;
-=======
-package vn.familyhealth.model.dto;
-
-public class AppointmentDTO {
->>>>>>> f3ef2a1816e0a6ceed82d37f450c23fd4ce4c822:src/main/java/vn/familyhealth/model/dto/AppointmentDTO.java
 }

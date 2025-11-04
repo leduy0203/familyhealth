@@ -3,10 +3,9 @@ package vn.familyhealth.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import vn.familyhealth.common.Gender;
+import familyhealth.common.Gender;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "users")
