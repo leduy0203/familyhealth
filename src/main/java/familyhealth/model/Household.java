@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "households")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Household{

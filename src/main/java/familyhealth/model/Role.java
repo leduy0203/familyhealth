@@ -6,6 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "roles")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role {

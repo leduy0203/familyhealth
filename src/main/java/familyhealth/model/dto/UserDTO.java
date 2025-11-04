@@ -47,7 +47,7 @@ public class UserDTO {
     private Boolean isActive;
 
     @JsonProperty("profile_id")
-    private Integer profileId;
+    private Long profileId;
 
     @NotNull(message = "Role ID không được null")
     @JsonProperty("role_id")

@@ -7,6 +7,7 @@ import familyhealth.common.Relation;
 @Entity
 @Table(name = "members")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Member {

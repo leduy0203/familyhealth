@@ -7,6 +7,7 @@ import familyhealth.common.Expertise;
 @Entity
 @Table(name = "doctors")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Doctor{

@@ -26,4 +26,6 @@ public class UserRequestDTO {
     private Gender gender;
 
     private LocalDateTime dateOfBirth;
+
+    private String getCccd;
 }
