@@ -1,5 +1,8 @@
 package familyhealth.service.impl;
 
+import familyhealth.mapper.DoctorMapper;
+import familyhealth.mapper.RoleMapper;
+import familyhealth.model.Doctor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,13 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Role creatRole(RoleDTO roleDTO) {
+    public Role createRole(RoleDTO roleDTO) {
         String name = roleDTO.getName();
         if(roleRepository.existsByName(name)){
             throw new DataIntegrityViolationException("Role name already exists");
         }
-        Role role = new Role();
-        role.setName(roleDTO.getName());
+
+        Role role = RoleMapper.convertToRole(roleDTO);
         return roleRepository.save(role);
     }
 

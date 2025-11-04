@@ -13,11 +13,6 @@ import familyhealth.service.impl.RoleService;
 public class RoleController {
     final private RoleService roleService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "Controller is working!";
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getRole(@PathVariable Long id){
         try{
@@ -31,7 +26,7 @@ public class RoleController {
     @PostMapping("")
     public ResponseEntity<?> creatRole(@RequestBody RoleDTO roleDTO){
         try{
-            Role role = roleService.creatRole(roleDTO);
+            Role role = roleService.createRole(roleDTO);
             return ResponseEntity.ok("Create role : " + role);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

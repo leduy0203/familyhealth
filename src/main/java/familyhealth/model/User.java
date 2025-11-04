@@ -44,7 +44,7 @@ public class User {
     private Boolean isActive = true;
 
     @Column(name = "profile_id")
-    private Integer profileId;
+    private Long profileId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "role_id", nullable = false)
