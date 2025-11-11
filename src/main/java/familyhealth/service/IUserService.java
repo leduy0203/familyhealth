@@ -11,11 +11,10 @@ import familyhealth.model.dto.request.UserRequestDTO;
 import java.util.List;
 
 public interface IUserService {
-    User createUserDoctor(UserDTO userDTO, DoctorDTO doctorDTO);
-    User createUserMember(UserDTO userDTO, MemberDTO memberDTO, HouseholdDTO householdDTO);
-    String login(String phoneNumber, String password);
-    User updateUser(Long id, UserDTO userDTO);
+    User createUser(UserDTO userDTO);
+//    String login(String phoneNumber, String password);
+//    User updateUser(Long id, UserDTO userDTO);
     User getUser(Long id);
     void deleteUser(Long id);
-    List<User> getAllUsers();
+//    List<User> getAllUsers();
 }

@@ -1,29 +1,19 @@
 package familyhealth.controller;
 
-import familyhealth.model.dto.DoctorDTO;
-import familyhealth.model.dto.UserLoginDTO;
-import familyhealth.model.dto.request.DoctorRegisterDTO;
-import jakarta.validation.Valid;
+import familyhealth.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
-import familyhealth.model.dto.request.UserRequestDTO;
-import familyhealth.model.dto.response.ApiResponse;
-import familyhealth.model.dto.response.UserResponseDTO;
-import familyhealth.service.IUserService;
 
-import java.util.List;
 
 //@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
-    private final IUserService userService;
+    private final UserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getUser(@PathVariable Long id){
@@ -35,36 +25,47 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register/doctor")
-    public ResponseEntity<?> creatUser(@RequestBody DoctorRegisterDTO doctorRegisterDTO){
+    @PostMapping("/register")
+    public ResponseEntity<?> creatUser(@RequestBody UserDTO userDTO){
         try {
-            User createdUser = userService.createUserDoctor(doctorRegisterDTO.getUserDTO(), doctorRegisterDTO.getDoctorDTO());
-            return ResponseEntity.ok("Created User: " + createdUser.getFullName());
+            User userNew = userService.createUser(userDTO);
+            return ResponseEntity.ok("Created User: " + userNew);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id,
-                                             @RequestBody UserDTO userDTO){
-        try{
-            User user = userService.updateUser(id, userDTO);
-            return ResponseEntity.ok("Update user : " + user);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok("Deleted User : " + id);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+//
+//    @PostMapping("/register/member")
+//    public ResponseEntity<?> creatUserMember(@RequestBody MemberRegisterDTO memberRegisterDTO){
+//        try {
+//            User createdUser = userService.createUserMember(memberRegisterDTO.getUserDTO(), memberRegisterDTO.getMemberDTO(), memberRegisterDTO.getHouseholdId());
+//            return ResponseEntity.ok("Created User Member: " + createdUser.getFullName());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<String> updateUser(@PathVariable Long id,
+//                                             @RequestBody UserDTO userDTO){
+//        try{
+//            User user = userService.updateUser(id, userDTO);
+//            return ResponseEntity.ok("Update user : " + user);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+//        try {
+//            userService.deleteUser(id);
+//            return ResponseEntity.ok("Deleted User : " + id);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
 
 

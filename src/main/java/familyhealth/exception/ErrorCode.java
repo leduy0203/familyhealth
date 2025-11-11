@@ -8,16 +8,29 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(404, "User not found", HttpStatus.NOT_FOUND),
     USER_EXISTED(400, "User existed", HttpStatus.BAD_REQUEST),
+    MEMBER_NOT_FOUND(404, "Member not found", HttpStatus.NOT_FOUND),
+    MEMBER_EXISTED(400, "Member existed", HttpStatus.BAD_REQUEST),
+    DOCTOR_NOT_FOUND(404, "Doctor not found", HttpStatus.NOT_FOUND),
+    DOCTER_EXISTED(400, "Doctor existed", HttpStatus.BAD_REQUEST),
+    HOUSEHOLD_NOT_FOUND(404, "House hold not found", HttpStatus.NOT_FOUND),
+    HOUSEHOLD_EXISTED(400, "House hold existed", HttpStatus.BAD_REQUEST),
+    APPOINTMENT_NOT_FOUND(404, "Appointment not found", HttpStatus.NOT_FOUND),
+    APPOINTMENT_EXISTED(400, "Appointment existed", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
     ACCESS_DINED(403, "Access denied", HttpStatus.FORBIDDEN),
     TOKEN_INVALID(400, "Token invalid", HttpStatus.BAD_REQUEST),
     ROLE_EXISTED(400, "Role existed", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(400, "Role not existed", HttpStatus.BAD_REQUEST),
+    MEDICAL_RESULT_EXISTED(400, "Medical result existed", HttpStatus.BAD_REQUEST),
+    MEDICAL_RESULT_NOT_EXISTED(400, "Medical result not existed", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_EXPIRED(401, "Refresh token expired", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_INVALID(401, "Refresh token invalid", HttpStatus.BAD_REQUEST),
     TOKEN_BLACK_LIST(400, "Token black list", HttpStatus.BAD_REQUEST),
-    SIGN_OUT_FAILED(400, "Sign out failed", HttpStatus.BAD_REQUEST),
-    ;
+    SIGN_OUT_FAILED(400, "Sign out failed", HttpStatus.BAD_REQUEST);
+//    ALREADY_HAS_WIFE(400, "Household already has a wife/ Member not a female", HttpStatus.BAD_REQUEST),
+//    ALREADY_HAS_HUSBAND(400, "Household already has a husband/ Member not a male", HttpStatus.BAD_REQUEST),
+//    MALE_CANNOT_HAVE_HUSBAND(400, "Male household head cannot have a husband", HttpStatus.BAD_REQUEST),
+//    FEMALE_CANNOT_HAVE_WIFE(400, "Female household head cannot have a wife", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

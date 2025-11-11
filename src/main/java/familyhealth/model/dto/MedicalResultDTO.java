@@ -20,6 +20,10 @@ public class MedicalResultDTO {
     @JsonProperty("note")
     private String note;
 
+    @Size(max = 200, message = "Chuẩn đoán tối đa 200 ký tự")
+    @JsonProperty("diagnose")
+    private String diagnose;
+
     @NotNull(message = "Tổng tiền không được null")
     @PositiveOrZero(message = "Tổng tiền phải >= 0")
     @JsonProperty("total_money")

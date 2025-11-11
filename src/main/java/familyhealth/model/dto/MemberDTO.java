@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import familyhealth.common.Relation;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberDTO {
+public class MemberDTO extends PersonDTO{
     @NotNull(message = "Relation không được null")
     @JsonProperty("relation")
     private Relation relation;
@@ -23,7 +25,6 @@ public class MemberDTO {
     @JsonProperty("household_id")
     private Long householdId;
 
-    @NotNull(message = "User ID không được null")
     @JsonProperty("user_id")
     private Long userId;
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import familyhealth.common.AppointmentStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -18,16 +19,19 @@ import java.time.LocalDate;
 public class AppointmentDTO {
     @NotNull(message = "Thời gian gặp không được null")
     @JsonProperty("time")
-    private LocalDate time;
+    private LocalDateTime time;
 
     @NotNull(message = "Trạng thái không được null")
     @JsonProperty("status")
     private AppointmentStatus status;
 
-    @NotBlank(message = "Ghi chú không được để trống")
     @Size(max = 200, message = "Note tối đa 200 ký tự")
     @JsonProperty("note")
     private String note;
+
+    @Size(max = 200, message = "Địa điểm tối đa 200 ký tự")
+    @JsonProperty("location")
+    private String location;
 
     @NotNull(message = "Doctor ID không được null")
     @JsonProperty("doctor_id")

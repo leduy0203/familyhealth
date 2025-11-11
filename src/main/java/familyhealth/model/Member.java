@@ -3,14 +3,14 @@ package familyhealth.model;
 import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Relation;
-
+import lombok.experimental.SuperBuilder;
+@Data
 @Entity
 @Table(name = "members")
-@Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends Person{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,7 @@ public class Member {
     @JoinColumn(name = "household_id", nullable = false)
     private Household household;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(optional = true )
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 }

@@ -3,8 +3,6 @@ package familyhealth.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import familyhealth.common.Gender;
-
 import java.time.LocalDate;
 
 @Data
@@ -21,33 +19,11 @@ public class UserDTO {
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("fullname")
-    private String fullName;
-
-    @NotNull(message = "Gender không được null")
-    @JsonProperty("gender")
-    private Gender gender;
-
-    @Past(message = "Ngày sinh phải là ngày trong quá khứ")
-    @JsonProperty("date_of_birth")
-    private LocalDate dateOfBirth;
-
-    @Email(message = "Email không hợp lệ")
-    @JsonProperty("email")
-    private String email;
-
-    @Size(max = 12, message = "CCCD tối đa 12 ký tự")
-    @JsonProperty("cccd")
-    private String cccd;
-
     @JsonProperty("created_at")
     private LocalDate createdAt;
 
     @JsonProperty("is_active")
     private Boolean isActive;
-
-    @JsonProperty("profile_id")
-    private Long profileId;
 
     @NotNull(message = "Role ID không được null")
     @JsonProperty("role_id")

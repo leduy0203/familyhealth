@@ -9,6 +9,7 @@ public class RoleMapper {
 
         return Role.builder()
                 .name(dto.getName())
+                .isActive(dto.getIsActive())
                 .build();
     }
 }
