@@ -9,6 +9,12 @@ public class DoctorMapper {
         if (dto == null) return null;
 
         return Doctor.builder()
+                .fullname(dto.getFullname())
+                .idCard(dto.getIdCard())
+                .address(dto.getAddress())
+                .gender(dto.getGender())
+                .dateOfBirth(dto.getDateOfBirth())
+                .email(dto.getEmail())
                 .user(user)
                 .expertise(dto.getExpertise())
                 .bio(dto.getBio())

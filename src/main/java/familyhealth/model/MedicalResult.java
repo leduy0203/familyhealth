@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "medical_results")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicalResult {
@@ -21,6 +22,9 @@ public class MedicalResult {
 
     @Column(nullable = false, length = 200)
     private String note;
+
+    @Column(nullable = false, length = 200)
+    private String diagnose;
 
     @Column(name = "total_money", nullable = false)
     private Float totalMoney;

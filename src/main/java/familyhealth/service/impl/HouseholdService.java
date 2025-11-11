@@ -1,6 +1,7 @@
 package familyhealth.service.impl;
 
-import familyhealth.mapper.DoctorMapper;
+import familyhealth.exception.AppException;
+import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.HouseHoldMapper;
 import familyhealth.model.Household;
 import familyhealth.model.dto.HouseholdDTO;
@@ -17,7 +18,7 @@ public class HouseholdService implements IHouseholdService {
     @Override
     public Household getHousehold(Long id) {
         return householdRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("House Hold not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.HOUSEHOLD_NOT_FOUND));
     }
 
     @Override
@@ -28,11 +29,16 @@ public class HouseholdService implements IHouseholdService {
 
     @Override
     public Household updateHousehold(Long id, HouseholdDTO householdDTO) {
-        return null;
+        Household existingHousehold  = getHousehold(id);
+        Household updatedHousehold = HouseHoldMapper.convertToHousehold(householdDTO);
+        updatedHousehold.setId(existingHousehold.getId());
+        return householdRepository.save(updatedHousehold);
     }
 
     @Override
     public void deleteHousehold(Long id) {
-
+        Household existingHousehold = getHousehold(id);
+        existingHousehold.setIsActive(false);
+        householdRepository.save(existingHousehold);
     }
 }

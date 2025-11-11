@@ -15,8 +15,10 @@ public class Household{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long househeadId;
+
     @Column(length = 200, nullable = false)
-    private String address = "";
+    private String address;
 
     @Column(nullable = false)
     private Integer quantity = 1;

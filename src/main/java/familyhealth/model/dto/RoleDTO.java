@@ -15,4 +15,7 @@ public class RoleDTO {
     @NotBlank(message = "Tên role không được để trống")
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("is_active")
+    private Boolean isActive;
 }

@@ -1,0 +1,45 @@
+package familyhealth.service.impl;
+
+import familyhealth.exception.AppException;
+import familyhealth.exception.ErrorCode;
+import familyhealth.mapper.MedicalResultMapper;
+import familyhealth.model.Appointment;
+import familyhealth.model.MedicalResult;
+import familyhealth.model.dto.MedicalResultDTO;
+import familyhealth.repository.MedicalResultRepository;
+import familyhealth.service.IMedicalResultService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+public class MedicalResultService implements IMedicalResultService {
+    private final MedicalResultRepository medicalResultRepository;
+    private final AppointmentService appointmentService;
+
+    @Override
+    public MedicalResult getMedicalResult(Long id) {
+        return medicalResultRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.MEDICAL_RESULT_NOT_EXISTED));
+    }
+
+    @Override
+    public MedicalResult createMedicalResult(MedicalResultDTO medicalResultDTO) {
+        Appointment appointment = appointmentService.getAppointment(medicalResultDTO.getAppointmentId());
+        MedicalResult medicalResult = MedicalResultMapper.convertToMedicalResult(medicalResultDTO,appointment);
+        return medicalResultRepository.save(medicalResult);
+    }
+
+    @Override
+    public MedicalResult updateMedicalResult(Long id, MedicalResultDTO medicalResultDTO) {
+        MedicalResult medicalResultexisting = getMedicalResult(id);
+        MedicalResult medicalResult = MedicalResultMapper.convertToMedicalResult(medicalResultDTO, medicalResultexisting.getAppointment());
+        return medicalResultRepository.save(medicalResult);
+    }
+
+    @Override
+    public void deleteMedicalResult(Long id) {
+        MedicalResult medicalResult = getMedicalResult(id);
+        medicalResultRepository.delete(medicalResult);
+    }
+}

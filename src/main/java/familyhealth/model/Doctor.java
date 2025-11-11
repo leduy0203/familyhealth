@@ -3,14 +3,14 @@ package familyhealth.model;
 import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Expertise;
-
+import lombok.experimental.SuperBuilder;
+@Data
 @Entity
 @Table(name = "doctors")
-@Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Doctor{
+public class Doctor extends Person{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

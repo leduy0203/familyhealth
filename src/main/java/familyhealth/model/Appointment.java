@@ -5,10 +5,12 @@ import lombok.*;
 import familyhealth.common.AppointmentStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Appointment {
@@ -16,14 +18,17 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate time;
+    private LocalDateTime time;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private AppointmentStatus status;
 
-    @Column(length = 200, nullable = false)
+    @Column(length = 200)
     private String note = "";
+
+    @Column(length = 200)
+    private String location = "";
 
     @ManyToOne()
     @JoinColumn(name = "doctor_id", nullable = false)
