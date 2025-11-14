@@ -6,5 +6,6 @@ public class MessageKey {
     public static final String UPDATE_DOCTOR_SUCCESS = "Update doctor successfully.";
     public static final String DELETE_DOCTOR_SUCCESS = "Delete doctor successfully.";
     public static final String GET_DOCTOR_SUCCESS    = "Get doctor successfully.";
+    public static final String GET_LIST_DOCTOR_SUCCESS    = "Get list doctor successfully.";
 
 }

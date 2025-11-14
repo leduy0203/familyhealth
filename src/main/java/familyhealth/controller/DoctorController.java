@@ -6,9 +6,11 @@ import familyhealth.model.Doctor;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.model.dto.response.ApiResponse;
+import familyhealth.model.dto.response.PageResponse;
 import familyhealth.service.impl.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,27 @@ import static org.springframework.http.HttpStatus.*;
 public class DoctorController {
 
     private final DoctorService doctorService;
+
+
+    @GetMapping
+    public ResponseEntity<?> getAllDoctors(
+            @RequestParam(required = false) String[] search,
+            Pageable pageable) {
+        try {
+
+            PageResponse pageResponse = doctorService.getAllDoctors(search, pageable);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_LIST_DOCTOR_SUCCESS)
+                    .data(pageResponse)
+                    .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDoctor(@PathVariable Long id) {
