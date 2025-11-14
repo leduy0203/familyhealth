@@ -2,6 +2,7 @@ package familyhealth.controller;
 
 import familyhealth.model.Doctor;
 import familyhealth.model.dto.DoctorDTO;
+import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.service.impl.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ public class DoctorController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> creatDoctor(@RequestBody DoctorDTO doctorDTO){
+    public ResponseEntity<?> creatDoctor(@RequestBody DoctorRegisterDTO doctorRegisterDTO){
         try {
-            Doctor doctor = doctorService.createDoctor(doctorDTO);
+            Doctor doctor = doctorService.createDoctor(doctorRegisterDTO.getDoctorDTO(), doctorRegisterDTO.getUserDTO());
             return ResponseEntity.ok("Created Doctor: " + doctor);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
