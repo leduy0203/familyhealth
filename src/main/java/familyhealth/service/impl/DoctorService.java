@@ -5,6 +5,7 @@ import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.DoctorMapper;
 import familyhealth.model.Doctor;
 import familyhealth.model.dto.DoctorDTO;
+import familyhealth.model.dto.UserDTO;
 import familyhealth.repository.DoctorRepository;
 import familyhealth.service.IDoctorService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,9 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public Doctor createDoctor(DoctorDTO doctorDTO) {
-        User existingUser = userService.getUser(doctorDTO.getUserId());
-        Doctor doctor = DoctorMapper.convertToDotor(doctorDTO, existingUser);
+    public Doctor createDoctor(DoctorDTO doctorDTO, UserDTO userDTO) {
+        User user = userService.createUser(userDTO);
+        Doctor doctor = DoctorMapper.convertToDotor(doctorDTO, user);
         return doctorRepository.save(doctor);
     }
 
