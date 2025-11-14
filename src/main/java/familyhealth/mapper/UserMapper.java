@@ -3,6 +3,7 @@ package familyhealth.mapper;
 import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.Role;
+import familyhealth.model.dto.request.DoctorRegisterDTO;
 
 import java.time.LocalDateTime;
 
@@ -15,13 +16,25 @@ public class UserMapper {
                 .build();
     }
 
-    public static User convertToUser(UserDTO dto, Role role) {
-        if (dto == null) return null;
+    public static User convertToUser(DoctorRegisterDTO request, Role role) {
+        if (request == null) return null;
 
         return User.builder()
-                .phone(dto.getPhone())
-                .password(dto.getPassword())
-                .isActive(dto.getIsActive() != null ? dto.getIsActive() : true)
+                .phone(request.getPhone())
+                .password(request.getPassword())
+                .isActive(request.getIsActive() != null ? request.getIsActive() : true)
+                .createdAt(LocalDateTime.now())
+                .role(role)
+                .build();
+    }
+
+    public static User convertToUser(UserDTO request, Role role) {
+        if (request == null) return null;
+
+        return User.builder()
+                .phone(request.getPhone())
+                .password(request.getPassword())
+                .isActive(request.getIsActive() != null ? request.getIsActive() : true)
                 .createdAt(LocalDateTime.now())
                 .role(role)
                 .build();

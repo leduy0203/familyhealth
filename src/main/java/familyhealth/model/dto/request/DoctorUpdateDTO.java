@@ -1,22 +1,17 @@
-package familyhealth.model.dto;
+package familyhealth.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import familyhealth.common.Expertise;
+import familyhealth.model.dto.PersonDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-import familyhealth.common.Expertise;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@SuperBuilder
-@AllArgsConstructor
-@NoArgsConstructor
-public class DoctorDTO extends PersonDTO{
-
-    private Long id;
-
+@Getter
+@Setter
+public class DoctorUpdateDTO extends PersonDTO {
     @NotNull(message = "Chuyên ngành không được null")
     @JsonProperty("expertise")
     private Expertise expertise;
@@ -25,9 +20,4 @@ public class DoctorDTO extends PersonDTO{
     @Size(max = 255, message = "Bio tối đa 255 ký tự")
     @JsonProperty("bio")
     private String bio;
-
-    @NotNull(message = "User ID không được null")
-    @JsonProperty("user_id")
-    private Long userId;
-
 }

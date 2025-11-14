@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
@@ -28,7 +29,6 @@ public class PersonDTO {
     private Gender gender;
 
     @Past(message = "Ngày sinh phải là ngày trong quá khứ")
-    @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
 
     @Email(message = "Email không hợp lệ")
@@ -36,6 +36,5 @@ public class PersonDTO {
     private String email;
 
     @Size(max = 12, message = "CCCD tối đa 12 ký tự")
-    @JsonProperty("id_card")
     private String idCard;
 }

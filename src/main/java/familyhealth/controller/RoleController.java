@@ -27,7 +27,7 @@ public class RoleController {
     public ResponseEntity<?> creatRole(@RequestBody RoleDTO roleDTO){
         try{
             Role role = roleService.createRole(roleDTO);
-            return ResponseEntity.ok("Create role : " + role);
+            return ResponseEntity.ok(role);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
