@@ -1,5 +1,6 @@
 package familyhealth.service.impl;
 
+import familyhealth.common.UserType;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.DoctorMapper;
@@ -26,7 +27,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public Role createRole(RoleDTO roleDTO) {
-        String name = roleDTO.getName();
+        UserType name = roleDTO.getName();
         if(roleRepository.existsByName(name)){
             throw new AppException(ErrorCode.ROLE_EXISTED);
         }

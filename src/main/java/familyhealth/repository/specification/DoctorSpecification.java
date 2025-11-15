@@ -35,9 +35,9 @@ public class DoctorSpecification {
         return (root, query, criteriaBuilder) -> {
             switch (key.toLowerCase().trim()) {
                 case "name":
-                    return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + value.toLowerCase() + "%");
+                    return criteriaBuilder.like(criteriaBuilder.lower(root.get("fullname")), "%" + value.toLowerCase() + "%");
                 case "specialty":
-                    return criteriaBuilder.equal(root.get("specialty"), value);
+                    return criteriaBuilder.equal(root.get("expertise"), value);
                 default:
                     return criteriaBuilder.conjunction();
             }

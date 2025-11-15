@@ -24,7 +24,6 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-
     @GetMapping
     public ResponseEntity<?> getAllDoctors(
             @RequestParam(required = false) String[] search,

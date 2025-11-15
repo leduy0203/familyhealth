@@ -1,5 +1,6 @@
 package familyhealth.service.impl;
 
+import familyhealth.common.UserType;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.DoctorMapper;
@@ -11,6 +12,7 @@ import familyhealth.model.dto.UserDTO;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.repository.DoctorRepository;
+import familyhealth.repository.RoleRepository;
 import familyhealth.repository.UserRepository;
 import familyhealth.repository.specification.DoctorSpecification;
 import familyhealth.service.IDoctorService;
@@ -25,6 +27,8 @@ import familyhealth.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static familyhealth.common.UserType.DOCTOR;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,7 +36,7 @@ public class DoctorService implements IDoctorService {
     private final DoctorRepository doctorRepository;
     private final UserRepository userRepository;
     private final UserService userService;
-    private final RoleService roleService;
+    private final RoleRepository roleRepository;
 
     @Override
     public Doctor getDoctor(Long id) {
@@ -47,7 +51,8 @@ public class DoctorService implements IDoctorService {
             throw new AppException(ErrorCode.PHONE_ALREADY_EXISTS);
         }
 
-        Role role = this.roleService.getRole(request.getRoleId());
+        Role role = roleRepository.findByName(DOCTOR)
+                .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         User user = UserMapper.convertToUser(request, role);
         this.userRepository.save(user);

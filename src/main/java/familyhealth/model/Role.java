@@ -1,5 +1,6 @@
 package familyhealth.model;
 
+import familyhealth.common.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class Role {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private UserType name;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;

@@ -17,7 +17,7 @@ public class RoleController {
     public ResponseEntity<?> getRole(@PathVariable Long id){
         try{
             Role role = roleService.getRole(id);
-            return ResponseEntity.ok("Get role " + role);
+            return ResponseEntity.ok(role);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

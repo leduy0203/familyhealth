@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 public class DoctorRegisterDTO extends PersonDTO {
 
-
     @NotBlank(message = "Phone không được để trống")
     @Size(max = 10, message = "Phone tối đa 10 ký tự")
     @JsonProperty("phone")
@@ -20,10 +19,6 @@ public class DoctorRegisterDTO extends PersonDTO {
     @NotBlank(message = "Password không được để trống")
     @JsonProperty("password")
     private String password;
-
-    @NotNull(message = "Role ID không được null")
-    @JsonProperty("role_id")
-    private Long roleId;
 
     @NotNull(message = "Chuyên ngành không được null")
     @JsonProperty("expertise")
