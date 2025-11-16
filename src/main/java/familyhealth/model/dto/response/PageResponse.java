@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class PageResponse {
+public class PageResponse<T> {
     private Meta meta;
-    private Object result;
+    private T result;
 
     @Getter
     @Setter

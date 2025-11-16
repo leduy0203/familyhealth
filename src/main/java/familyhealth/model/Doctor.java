@@ -1,5 +1,6 @@
 package familyhealth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Expertise;
@@ -22,7 +23,8 @@ public class Doctor extends Person{
     @Column(length = 255, nullable = false)
     private String bio = "";
 
-    @ManyToOne()
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 }

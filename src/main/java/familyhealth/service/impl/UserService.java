@@ -2,16 +2,23 @@ package familyhealth.service.impl;
 
 import familyhealth.common.Gender;
 import familyhealth.common.Relation;
+import familyhealth.mapper.DoctorMapper;
 import familyhealth.mapper.HouseHoldMapper;
 import familyhealth.model.*;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.HouseholdDTO;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.UserDTO;
+import familyhealth.model.dto.response.PageResponse;
+import familyhealth.model.dto.response.UserResponse;
 import familyhealth.repository.HouseholdRepository;
 import familyhealth.repository.MemberRepository;
 import familyhealth.repository.RoleRepository;
+import familyhealth.repository.specification.DoctorSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
@@ -20,10 +27,12 @@ import familyhealth.repository.UserRepository;
 import familyhealth.service.IUserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
@@ -52,6 +61,30 @@ public class UserService implements IUserService {
         User user = getUser(id);
         userRepository.delete(user);
     }
+
+    @Override
+    public PageResponse<List<UserResponse>> getAllUsers(String[] search,Pageable pageable) {
+
+//        Specification<User> spec = DoctorSpecification.fromSearchCriteria(search);
+
+        Page<User> userPage = userRepository.findAll( pageable);
+
+        List<UserResponse> userResponses = userPage.getContent().stream()
+                .map(UserMapper::convertToUserResponse)
+                .toList();
+
+        PageResponse.Meta meta = new PageResponse.Meta();
+        meta.setPage(userPage.getNumber());
+        meta.setPageSize(userPage.getSize());
+        meta.setPages(userPage.getTotalPages());
+        meta.setTotal(userPage.getTotalElements());
+
+        return PageResponse.<List<UserResponse>>builder()
+                .meta(meta)
+                .result(userResponses)
+                .build();
+    }
+
 
     //Tao user Doctor - chi Admin moi tao duoc
 //    @Override

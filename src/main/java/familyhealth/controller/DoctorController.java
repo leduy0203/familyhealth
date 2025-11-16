@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -30,7 +32,7 @@ public class DoctorController {
             Pageable pageable) {
         try {
 
-            PageResponse pageResponse = doctorService.getAllDoctors(search, pageable);
+            PageResponse<List<DoctorDTO>> pageResponse = doctorService.getAllDoctors(search, pageable);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(OK.value())

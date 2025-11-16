@@ -1,4 +1,4 @@
-package familyhealth.model.dto.request; // Đặt DTO vào một package duy nhất
+package familyhealth.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import familyhealth.common.Expertise;

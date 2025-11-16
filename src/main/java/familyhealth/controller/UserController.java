@@ -1,11 +1,20 @@
 package familyhealth.controller;
 
+import familyhealth.Utils.MessageKey;
+import familyhealth.model.dto.response.ApiResponse;
+import familyhealth.model.dto.response.PageResponse;
+import familyhealth.model.dto.response.UserResponse;
 import familyhealth.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 
 //@Slf4j
@@ -13,6 +22,7 @@ import familyhealth.model.dto.UserDTO;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/{id}")
@@ -21,6 +31,26 @@ public class UserController {
             User user = userService.getUser(id);
             return ResponseEntity.ok("Get user : " + user);
         }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllUser(
+            @RequestParam(required = false) String[] search,
+            Pageable pageable) {
+        try {
+
+            PageResponse<List<UserResponse>> pageResponse = userService.getAllUsers(search,pageable);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_LIST_USER_SUCCESS)
+                    .data(pageResponse)
+                    .build()
+            );
+
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -34,7 +64,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-//
+
 //    @PostMapping("/register/member")
 //    public ResponseEntity<?> creatUserMember(@RequestBody MemberRegisterDTO memberRegisterDTO){
 //        try {
@@ -56,16 +86,18 @@ public class UserController {
 //            return ResponseEntity.badRequest().body(e.getMessage());
 //        }
 //    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<String> deleteUser(@PathVariable Long id){
-//        try {
-//            userService.deleteUser(id);
-//            return ResponseEntity.ok("Deleted User : " + id);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("Deleted User : " + id);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
 

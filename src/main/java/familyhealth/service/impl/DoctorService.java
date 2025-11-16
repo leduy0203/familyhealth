@@ -75,7 +75,7 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public PageResponse getAllDoctors(String[] search, Pageable pageable) {
+    public PageResponse<List<DoctorDTO>> getAllDoctors(String[] search, Pageable pageable) {
 
         Specification<Doctor> spec = DoctorSpecification.fromSearchCriteria(search);
 
@@ -91,7 +91,7 @@ public class DoctorService implements IDoctorService {
         meta.setPages(doctorPage.getTotalPages());
         meta.setTotal(doctorPage.getTotalElements());
 
-        return PageResponse.builder()
+        return PageResponse.<List<DoctorDTO>>builder()
                 .meta(meta)
                 .result(doctorDTOs)
                 .build();

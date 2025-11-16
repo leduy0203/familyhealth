@@ -4,6 +4,7 @@ import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.Role;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
+import familyhealth.model.dto.response.UserResponse;
 
 import java.time.LocalDateTime;
 
@@ -40,4 +41,27 @@ public class UserMapper {
                 .build();
     }
 
+    public static UserResponse convertToUserResponse(User user) {
+
+        String email = null;
+        String fullName = "N/A";
+
+        if (user.getDoctor() != null) {
+            email = user.getDoctor().getEmail();
+            fullName = user.getDoctor().getFullname();
+        }
+
+        else if (user.getMember() != null) {
+            email = user.getMember().getEmail();
+            fullName = user.getMember().getFullname();
+        }
+
+        return UserResponse.builder()
+                .email(email)
+                .active(user.getIsActive() ? 1L : 0L)
+                .fullName(fullName)
+                .roleName(user.getRole().getName().name())
+                .phone(user.getPhone())
+                .build();
+    }
 }

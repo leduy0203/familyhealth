@@ -1,5 +1,6 @@
 package familyhealth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Relation;
@@ -26,7 +27,8 @@ public class Member extends Person{
     @JoinColumn(name = "household_id", nullable = false)
     private Household household;
 
-    @ManyToOne(optional = true )
+    @OneToOne(optional = true )
     @JoinColumn(name = "user_id", nullable = true)
+    @JsonIgnore
     private User user;
 }
