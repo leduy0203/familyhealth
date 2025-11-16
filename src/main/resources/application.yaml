@@ -4,10 +4,33 @@ server:
     context-path: /familyhealth
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/familyhealth1
+    url: jdbc:mysql://localhost:3306/familyhealth
     username: root
     password:
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+vnpay:
+  tmnCode: HAQLDG05
+  hashSecret: KEKR6R8HEUOV0GPYPPZ8HMWM8QPA2AO8
+  pay_url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return_url: http://localhost:8080/familyhealth/api/payments/vnpay-callback
+
+frontend:
+  url: http://localhost:3000
+
+zalopay:
+  app_id:
+  key1:
+  key2:
+  pay_url: https://sb-openapi.zalopay.vn/v2/create
+  return_url: http://localhost:8080/familyhealth/api/payments/zalopay-callback
+
+momopay:
+  partner_code:
+  access_key:
+  secret_key:
+  pay_url: https://test-payment.momo.vn/gw_payment/transactionProcessor
+  return_url: http://localhost:8080/familyhealth/api/payments/momo-callback

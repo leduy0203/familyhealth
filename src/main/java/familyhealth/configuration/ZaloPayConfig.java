@@ -1,0 +1,21 @@
+package familyhealth.configuration;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Getter;
+
+@Configuration
+@Getter
+public class ZaloPayConfig {
+    @Value("${zalopay.app_id}")
+    private String appId;
+    @Value("${zalopay.key1}")
+    private String key1;
+    @Value("${zalopay.key2}")
+    private String key2;
+    @Value("${zalopay.pay_url}")
+    private String payUrl;
+    @Value("${zalopay.return_url}")
+    private String returnUrl;
+}
