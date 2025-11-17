@@ -13,7 +13,7 @@ import familyhealth.service.impl.RoleService;
 public class RoleController {
     final private RoleService roleService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getRole(@PathVariable Long id){
         try{
             Role role = roleService.getRole(id);
@@ -23,7 +23,7 @@ public class RoleController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> creatRole(@RequestBody RoleDTO roleDTO){
         try{
             Role role = roleService.createRole(roleDTO);
@@ -33,7 +33,7 @@ public class RoleController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateRole(@PathVariable Long id,
                                         @RequestBody RoleDTO roleDTO){
         try{
@@ -44,7 +44,7 @@ public class RoleController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteRole(@PathVariable Long id){
         try{
             roleService.deleteRole(id);

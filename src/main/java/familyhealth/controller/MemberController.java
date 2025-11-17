@@ -15,7 +15,7 @@ public class MemberController {
     private final MemberService memberService;
     private final UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<String> getMember(@PathVariable Long id){
         try{
             Member member = memberService.getMember(id);
@@ -25,7 +25,7 @@ public class MemberController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createMember(@RequestBody MemberDTO memberDTO){
         try {
             Member member = memberService.createMember(memberDTO);
@@ -35,7 +35,7 @@ public class MemberController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateMember(@PathVariable Long id,
                                         @RequestBody MemberDTO memberDTO){
         try{
@@ -46,7 +46,7 @@ public class MemberController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/update/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id){
         try{
             memberService.deleteMember(id);

@@ -1,11 +1,15 @@
 package familyhealth.controller;
 
+import familyhealth.Utils.MessageKey;
 import familyhealth.model.Appointment;
 import familyhealth.model.dto.AppointmentDTO;
+import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.service.impl.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,17 +17,22 @@ import org.springframework.web.bind.annotation.*;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
-        @GetMapping("/{id}")
-    public ResponseEntity<String> getAppointment(@PathVariable Long id){
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getAppointment(@PathVariable Long id){
         try{
             Appointment appointment = appointmentService.getAppointment(id);
-            return ResponseEntity.ok("Get Appointment : " + appointment);
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_APPOINTMENT_SUCCESS)
+                    .data(appointment)
+                    .build()
+            );
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
         try{
             Appointment appointment = appointmentService.createAppointment(appointmentDTO);
@@ -32,7 +41,7 @@ public class AppointmentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Long id,
                                         @RequestBody AppointmentDTO appointmentDTO){
         try{
@@ -43,7 +52,7 @@ public class AppointmentController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id){
         try{
             appointmentService.deleteAppointment(id);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class HouseholdController {
     final private HouseholdService householdService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getHousehold(@PathVariable Long id){
         try{
             Household household = householdService.getHousehold(id);
@@ -23,7 +23,7 @@ public class HouseholdController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createHousehold(@RequestBody HouseholdDTO householdDTO){
         try{
             Household household = householdService.createHousehold(householdDTO);
@@ -32,7 +32,7 @@ public class HouseholdController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateHousehold(@PathVariable Long id,
                                         @RequestBody HouseholdDTO householdDTO){
         try{
@@ -43,7 +43,7 @@ public class HouseholdController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteHousehold(@PathVariable Long id){
         try{
             householdService.deleteHousehold(id);

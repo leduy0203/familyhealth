@@ -25,7 +25,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<String> getUser(@PathVariable Long id){
         try{
             User user = userService.getUser(id);
@@ -35,7 +35,7 @@ public class UserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllUser(
             @RequestParam(required = false) String[] search,
             Pageable pageable) {
@@ -65,29 +65,7 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/register/member")
-//    public ResponseEntity<?> creatUserMember(@RequestBody MemberRegisterDTO memberRegisterDTO){
-//        try {
-//            User createdUser = userService.createUserMember(memberRegisterDTO.getUserDTO(), memberRegisterDTO.getMemberDTO(), memberRegisterDTO.getHouseholdId());
-//            return ResponseEntity.ok("Created User Member: " + createdUser.getFullName());
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-//
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<String> updateUser(@PathVariable Long id,
-//                                             @RequestBody UserDTO userDTO){
-//        try{
-//            User user = userService.updateUser(id, userDTO);
-//            return ResponseEntity.ok("Update user : " + user);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
         try {
             userService.deleteUser(id);

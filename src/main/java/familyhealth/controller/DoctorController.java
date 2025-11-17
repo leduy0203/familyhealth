@@ -26,7 +26,7 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors(
             @RequestParam(required = false) String[] search,
             Pageable pageable) {
@@ -46,7 +46,7 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getDoctor(@PathVariable Long id) {
         try {
             DoctorDTO doctor = DoctorMapper.convertToDoctorDTO(doctorService.getDoctor(id));
@@ -62,7 +62,7 @@ public class DoctorController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createDoctor(@Valid @RequestBody DoctorRegisterDTO doctorRegisterDTO) {
         try {
             doctorService.createDoctor(doctorRegisterDTO);
@@ -78,7 +78,7 @@ public class DoctorController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateDoctor(@Valid @PathVariable Long id,
                                           @RequestBody DoctorDTO doctorDTO) {
         try {
@@ -96,7 +96,7 @@ public class DoctorController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteDoctor(@PathVariable Long id) {
         try {
             doctorService.deleteDoctor(id);

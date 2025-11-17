@@ -11,6 +11,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+jwt:
+  expiration: 2592000
+  secretKey: NoGqvbiTkYcVvArxFI36DjCPjgQOIFo/962T4QO3fm8=
 
 vnpay:
   tmnCode: HAQLDG05
