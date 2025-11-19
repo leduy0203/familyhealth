@@ -59,7 +59,8 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(Long id) {
         User user = getUser(id);
-        userRepository.delete(user);
+        user.setIsActive(!user.getIsActive());
+        userRepository.save(user);
     }
 
     @Override

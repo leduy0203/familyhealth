@@ -10,4 +10,5 @@ public class MessageKey {
     public static final String GET_LIST_DOCTOR_SUCCESS    = "Get list doctor successfully.";
 
     public static final String GET_LIST_USER_SUCCESS = "Get list user successfully.";
+    public static final String CHANGE_STATUS_USER_SUCCESS = "Change status user successfully.";
 }

@@ -57,6 +57,7 @@ public class UserMapper {
         }
 
         return UserResponse.builder()
+                .id(user.getId())
                 .email(email)
                 .active(user.getIsActive() ? 1L : 0L)
                 .fullName(fullName)

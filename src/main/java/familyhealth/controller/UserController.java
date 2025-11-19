@@ -14,6 +14,7 @@ import familyhealth.model.dto.UserDTO;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> creatUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
         try {
             User userNew = userService.createUser(userDTO);
             return ResponseEntity.ok("Created User: " + userNew);
@@ -66,10 +67,16 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
         try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok("Deleted User : " + id);
+            this.userService.deleteUser(id);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(NO_CONTENT.value())
+                    .message(MessageKey.CHANGE_STATUS_USER_SUCCESS)
+                    .data(null)
+                    .build()
+            );
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
