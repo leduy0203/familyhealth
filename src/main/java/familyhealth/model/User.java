@@ -45,7 +45,7 @@ public class User implements UserDetails{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Member member;
 
-    private String ADMIN = UserType.ADMIN;
+    private String ADMIN = UserType.ADMIN.name();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

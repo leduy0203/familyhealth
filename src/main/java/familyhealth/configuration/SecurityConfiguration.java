@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> {
                     request
                             // User: login, register, get
-                            .requestMatchers("/api/v1/users/**").permitAll()
+                            .requestMatchers("/api/v1/users/**" , "/swagger-ui/**"  ,"/v3/api-docs/**").permitAll()
                             // Role
                             .requestMatchers("/api/v1/roles/**").hasRole(UserType.ADMIN.getValue())
                             // Member

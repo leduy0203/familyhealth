@@ -37,3 +37,17 @@ momopay:
   secret_key:
   pay_url: https://test-payment.momo.vn/gw_payment/transactionProcessor
   return_url: http://localhost:8080/familyhealth/api/payments/momo-callback
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+openapi:
+  service:
+    api-docs: familyhealth
+    title: Familyhealth API Documentation
+    version: v1.1.0
+    serverUrl: http://localhost:${server.port}/familyhealth
