@@ -4,6 +4,7 @@ import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.Role;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
+import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.model.dto.response.UserResponse;
 
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User convertToUser(UserDTO request, Role role) {
+    public static User convertToUser(UserRequestDTO request, Role role) {
         if (request == null) return null;
 
         return User.builder()

@@ -4,17 +4,20 @@ import familyhealth.common.Gender;
 import familyhealth.common.Relation;
 import familyhealth.mapper.DoctorMapper;
 import familyhealth.mapper.HouseHoldMapper;
+import familyhealth.mapper.MemberMapper;
 import familyhealth.model.*;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.HouseholdDTO;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.UserDTO;
+import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.model.dto.response.UserResponse;
 import familyhealth.repository.HouseholdRepository;
 import familyhealth.repository.MemberRepository;
 import familyhealth.repository.RoleRepository;
 import familyhealth.repository.specification.DoctorSpecification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +38,9 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final HouseholdRepository householdRepository;
+    private final MemberRepository memberRepository;
 
-    //Tìm tài khoản theo id
     @Override
     public User getUser(Long id) {
         return this.userRepository.findById(id)
@@ -45,15 +49,41 @@ public class UserService implements IUserService {
 
 
     @Override
-    public User createUser(UserDTO userDTO) {
-        if (this.userRepository.existsByPhone(userDTO.getPhone())) {
+    @Transactional(rollbackOn = Exception.class)
+    public User createUser(UserRequestDTO request) {
+
+        if (this.userRepository.existsByPhone(request.getPhone())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-        Role role = roleRepository.findById(userDTO.getRoleId())
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        User user = UserMapper.convertToUser(userDTO, role);
 
-        return userRepository.save(user);
+        Role role = roleRepository.findById(request.getRoleId())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        User user = UserMapper.convertToUser(request, role);
+
+        User userCreated = this.userRepository.save(user);
+
+        Household householdCreated = HouseHoldMapper.convertToHousehold(request);
+        this.householdRepository.save(householdCreated);
+
+        if (this.memberRepository.existsByIdCard(request.getMemberInfo().getCccd())) {
+            throw new AppException(ErrorCode.IDCARD_EXISTED);
+        }
+
+        if (this.memberRepository.existsByBhyt(request.getMemberInfo().getBhyt())) {
+            throw new AppException(ErrorCode.BHYT_EXISTED);
+        }
+
+        Member newMember = MemberMapper.convertToMember(request ,householdCreated , userCreated);
+        if (newMember != null) {
+
+            Member member = this.memberRepository.save(newMember);
+
+            householdCreated.setHouseheadId(member.getId());
+
+            this.householdRepository.save(householdCreated);
+        }
+
+        return userCreated;
     }
 
     @Override

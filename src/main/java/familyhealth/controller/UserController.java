@@ -1,6 +1,7 @@
 package familyhealth.controller;
 
 import familyhealth.Utils.MessageKey;
+import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.model.dto.response.UserResponse;
@@ -14,8 +15,7 @@ import familyhealth.model.dto.UserDTO;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 
 //@Slf4j
@@ -57,10 +57,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> createUser(@RequestBody UserRequestDTO request){
         try {
-            User userNew = userService.createUser(userDTO);
-            return ResponseEntity.ok("Created User: " + userNew);
+
+            User userNew = userService.createUser(request);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(CREATED.value())
+                    .message(MessageKey.CREATE_USER_SUCCESS)
+                    .data(userNew.getId())
+                    .build()
+            );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

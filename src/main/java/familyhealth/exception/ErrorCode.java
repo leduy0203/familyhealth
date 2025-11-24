@@ -27,7 +27,9 @@ public enum ErrorCode {
     REFRESH_TOKEN_INVALID(401, "Refresh token invalid", HttpStatus.BAD_REQUEST),
     TOKEN_BLACK_LIST(400, "Token black list", HttpStatus.BAD_REQUEST),
     SIGN_OUT_FAILED(400, "Sign out failed", HttpStatus.BAD_REQUEST),
-    PHONE_ALREADY_EXISTS(400,"Phone already existed" , HttpStatus.BAD_REQUEST);
+    PHONE_ALREADY_EXISTS(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
+    IDCARD_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
+    BHYT_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST);
 //    ALREADY_HAS_WIFE(400, "Household already has a wife/ Member not a female", HttpStatus.BAD_REQUEST),
 //    ALREADY_HAS_HUSBAND(400, "Household already has a husband/ Member not a male", HttpStatus.BAD_REQUEST),
 //    MALE_CANNOT_HAVE_HUSBAND(400, "Male household head cannot have a husband", HttpStatus.BAD_REQUEST),
