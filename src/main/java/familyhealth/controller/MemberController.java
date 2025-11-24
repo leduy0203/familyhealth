@@ -1,12 +1,20 @@
 package familyhealth.controller;
 
+import familyhealth.Utils.MessageKey;
 import familyhealth.model.Member;
 import familyhealth.model.dto.MemberDTO;
+import familyhealth.model.dto.request.MemberRegisterDTO;
+import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.service.impl.MemberService;
 import familyhealth.service.impl.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +34,16 @@ public class MemberController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createMember(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<?> createMember(@Valid @RequestBody MemberRegisterDTO request){
         try {
-            Member member = memberService.createMember(memberDTO);
-            return ResponseEntity.ok("Created Member: " + member);
+            Member member = memberService.createMember(request);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.CREATE_MEMBER_SUCCESS)
+                    .data(member.getId())
+                    .build()
+            );
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -53,6 +67,22 @@ public class MemberController {
             return ResponseEntity.ok("Delete Member : " + id);
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/families")
+    public ResponseEntity<?> getMyFamilyMembers() {
+        try {
+            List<Member> members = memberService.getFamilyMembers();
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_ALL_MEMBERS_SUCCESS)
+                    .data(members)
+                    .build()
+            );
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 }

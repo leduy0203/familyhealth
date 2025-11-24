@@ -1,8 +1,11 @@
 package familyhealth.common;
 
 import lombok.Data;
+import lombok.Getter;
 
+@Getter
 public enum UserType {
+
     ADMIN("ADMIN"),
     DOCTOR("DOCTOR"),
     PATIENT("PATIENT"),
@@ -14,8 +17,5 @@ public enum UserType {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
 }
 

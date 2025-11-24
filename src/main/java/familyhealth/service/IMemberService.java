@@ -1,13 +1,15 @@
 package familyhealth.service;
 
-import familyhealth.model.Household;
 import familyhealth.model.Member;
-import familyhealth.model.User;
 import familyhealth.model.dto.MemberDTO;
+import familyhealth.model.dto.request.MemberRegisterDTO;
+
+import java.util.List;
 
 public interface IMemberService {
         Member getMember(Long id);
-        Member createMember(MemberDTO memberDTO);
+        Member createMember(MemberRegisterDTO request);
         Member updateMember(Long id, MemberDTO memberDTO);
         void deleteMember(Long id);
+        public List<Member> getFamilyMembers();
 }

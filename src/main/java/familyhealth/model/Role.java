@@ -16,6 +16,7 @@ public class Role {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
     private UserType name;
 
     @Column(name = "is_active", nullable = false)

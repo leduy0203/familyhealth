@@ -5,6 +5,7 @@ import familyhealth.model.Household;
 import familyhealth.model.Member;
 import familyhealth.model.User;
 import familyhealth.model.dto.MemberDTO;
+import familyhealth.model.dto.request.MemberRegisterDTO;
 import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,23 @@ public class MemberMapper {
                 .user(user)
                 .build();
     }
+
+    public static Member convertToMember(MemberRegisterDTO request, User newUser, Household household) {
+
+        if (request == null) return null;
+
+        return Member.builder()
+                .fullname(request.getFullname())
+                .idCard(request.getIdCard())
+                .address(request.getAddress())
+                .gender(request.getGender())
+                .dateOfBirth(request.getDateOfBirth())
+                .email(request.getEmail())
+                .relation(request.getRelation())
+                .bhyt(request.getBhyt())
+                .household(household)
+                .user(newUser)
+                .build();
+    }
 }
+

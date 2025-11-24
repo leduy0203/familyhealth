@@ -4,6 +4,7 @@ import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.Role;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
+import familyhealth.model.dto.request.MemberRegisterDTO;
 import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.model.dto.response.UserResponse;
 
@@ -64,6 +65,17 @@ public class UserMapper {
                 .fullName(fullName)
                 .roleName(user.getRole().getName().name())
                 .phone(user.getPhone())
+                .build();
+    }
+
+    public static User convertToUser(MemberRegisterDTO.UserAccount userAccount) {
+        if (userAccount == null) return null;
+
+        return User.builder()
+                .phone(userAccount.getPhone())
+                .password(userAccount.getPassword())
+                .isActive(true)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }
