@@ -28,15 +28,16 @@ import java.util.List;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
+    private final UserDetailServiceCustomizer userDetailServiceCustomizer;
+    private final JwtDecoderCustomizer jwtDecoder;
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+
     private static final String[] White_List = {
             "/api/v1/auth/**",
             "/api/v1/users/register",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     };
-
-    private final UserDetailServiceCustomizer userDetailServiceCustomizer;
-    private final JwtDecoderCustomizer jwtDecoder;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,7 +54,9 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated());
         
         http.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder))
+                .jwt(jwtConfigurer -> jwtConfigurer
+                        .decoder(jwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .accessDeniedHandler(new JwtAccessDenied())
         );
