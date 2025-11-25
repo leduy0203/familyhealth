@@ -2,6 +2,7 @@ package familyhealth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import familyhealth.model.Role;
 import familyhealth.model.dto.RoleDTO;
@@ -10,6 +11,7 @@ import familyhealth.service.impl.RoleService;
 @RestController
 @RequestMapping("/api/v1/roles")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
     final private RoleService roleService;
 

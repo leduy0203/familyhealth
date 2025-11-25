@@ -5,6 +5,7 @@ import familyhealth.model.dto.HouseholdDTO;
 import familyhealth.service.impl.HouseholdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class HouseholdController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT_HOUSEHOLD')")
     public ResponseEntity<?> createHousehold(@RequestBody HouseholdDTO householdDTO){
         try{
             Household household = householdService.createHousehold(householdDTO);
@@ -33,6 +35,7 @@ public class HouseholdController {
         }
     }
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT_HOUSEHOLD')")
     public ResponseEntity<?> updateHousehold(@PathVariable Long id,
                                         @RequestBody HouseholdDTO householdDTO){
         try{
@@ -44,6 +47,7 @@ public class HouseholdController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteHousehold(@PathVariable Long id){
         try{
             householdService.deleteHousehold(id);

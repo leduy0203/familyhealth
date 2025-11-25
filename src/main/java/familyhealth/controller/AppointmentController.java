@@ -7,6 +7,7 @@ import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.service.impl.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -33,6 +34,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT', 'PATIENT_HOUSEHOLD')")
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
         try{
             Appointment appointment = appointmentService.createAppointment(appointmentDTO);

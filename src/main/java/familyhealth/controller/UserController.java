@@ -9,6 +9,7 @@ import familyhealth.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
@@ -27,22 +28,23 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<String> getUser(@PathVariable Long id){
-        try{
+    public ResponseEntity<String> getUser(@PathVariable Long id) {
+        try {
             User user = userService.getUser(id);
             return ResponseEntity.ok("Get user : " + user);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllUser(
             @RequestParam(required = false) String[] search,
             Pageable pageable) {
         try {
 
-            PageResponse<List<UserResponse>> pageResponse = userService.getAllUsers(search,pageable);
+            PageResponse<List<UserResponse>> pageResponse = userService.getAllUsers(search, pageable);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(OK.value())
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody UserRequestDTO request){
+    public ResponseEntity<?> createUser(@RequestBody UserRequestDTO request) {
         try {
 
             User userNew = userService.createUser(request);
@@ -75,7 +77,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
 
             this.userService.deleteUser(id);
@@ -91,67 +94,4 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @GetMapping
-//    public ApiResponse<?> getAllUser() {
-//        log.info("Request to get all users");
-//
-//        List<User> users = userService.getAllUsers();
-//        return ApiResponse.<List<User>>builder()
-//                .code(HttpStatus.OK.value())
-//                .data(users)
-//                .message("Get all users successfully")
-//                .build();
-//    }
-//
-//    @PostMapping
-//    public ApiResponse<?> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-//        log.info("Request to create user: {}", userRequestDTO);
-//
-//        User user = userService.createUser(userRequestDTO);
-//        return ApiResponse.<User>builder()
-//                .code(HttpStatus.CREATED.value())
-//                .data(user)
-//                .message("user created successfully")
-//                .build();
-//    }
-//
-//    @PutMapping
-//    public ApiResponse<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO) {
-//        // Todo
-//        return ApiResponse.<UserResponseDTO>builder()
-//                .build();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ApiResponse<UserDTO> getById(@PathVariable Long id) {
-//       //Todo
-//        return ApiResponse.<UserDTO>builder()
-//                .code(HttpStatus.OK.value())
-//                .message("Get user by id successfully")
-//                .data(null)
-//                .build();
-//    }
-//
-//    @DeleteMapping
-//    public ApiResponse<?> deleteUser() {
-//        return ApiResponse.<String>builder()
-//                .code(HttpStatus.NO_CONTENT.value())
-//                .message("Delete user successfully")
-//                .build();
-//    }
 }

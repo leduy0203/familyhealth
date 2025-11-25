@@ -1,62 +1,93 @@
 package familyhealth.configuration;
 
-import familyhealth.common.UserType;
-import familyhealth.component.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import static org.springframework.http.HttpMethod.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import familyhealth.service.UserDetailServiceCustomizer;
 
+import java.util.List;
 
 @Configuration
-@EnableMethodSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
+    private static final String[] White_List = {
+            "/api/v1/auth/**",
+            "/api/v1/users/register",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
 
+    private final UserDetailServiceCustomizer userDetailServiceCustomizer;
+    private final JwtDecoderCustomizer jwtDecoder;
 
-    private final JwtTokenFilter jwtTokenFilter;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(request -> {
-                    request
-                            // User: login, register, get
-                            .requestMatchers("/api/v1/users/**" , "/swagger-ui/**"  ,"/v3/api-docs/**").permitAll()
-                            // Role
-                            .requestMatchers("/api/v1/roles/**").hasRole(UserType.ADMIN.getValue())
-                            // Member
-                            .requestMatchers(POST, "/api/v1/members/**").hasAnyRole(UserType.ADMIN.getValue(),
-                                    UserType.PATIENT_HOUSEHOLD.getValue())
-                            // Doctor
-                            .requestMatchers(POST, "/api/v1/doctors/**").hasRole(UserType.ADMIN.getValue())
-                            .requestMatchers(DELETE, "/api/v1/doctors/**").hasRole(UserType.ADMIN.getValue())
-                            .requestMatchers(PUT, "/api/v1/doctors/**").hasAnyRole(UserType.ADMIN.getValue(),
-                                    UserType.DOCTOR.getValue())
-                            // Appointment
-                            .requestMatchers(POST, "/api/v1/appointments/**").hasAnyRole(UserType.ADMIN.getValue(),
-                                    UserType.PATIENT.getValue(),
-                                    UserType.PATIENT_HOUSEHOLD.getValue())
-                            // Medical results
-                            .requestMatchers(PUT, "/api/v1/medicalresults/**").hasRole(UserType.ADMIN.getValue())
-                            .requestMatchers(DELETE, "/api/v1/medicalresults/**").hasRole(UserType.ADMIN.getValue())
-                            // Household
-                            .requestMatchers(POST, "/api/v1/households/**").hasAnyRole(UserType.ADMIN.getValue(),
-                                    UserType.PATIENT_HOUSEHOLD.getValue())
-                            .requestMatchers(PUT, "/api/v1/households/**").hasAnyRole(UserType.ADMIN.getValue(),
-                                    UserType.PATIENT_HOUSEHOLD.getValue())
-                            .requestMatchers(DELETE, "/api/v1/households/**").hasAnyRole(UserType.ADMIN.getValue())
-                            // Any other
-                            .anyRequest().authenticated();
-                });
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults());
+
+        http.authorizeHttpRequests(request -> request
+                .requestMatchers(White_List).permitAll()
+                .anyRequest().authenticated());
+        
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .accessDeniedHandler(new JwtAccessDenied())
+        );
+        
+        http.sessionManagement(sessionManager -> sessionManager
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailServiceCustomizer);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept-Language", "x-no-retry", "Access-Control-Allow-Origin"));
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type", "Accept-Language"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return new CorsFilter(source);
     }
 }

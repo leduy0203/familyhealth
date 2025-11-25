@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class DoctorController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createDoctor(@Valid @RequestBody DoctorRegisterDTO doctorRegisterDTO) {
         try {
 
@@ -82,6 +84,7 @@ public class DoctorController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<?> updateDoctor(@Valid @PathVariable Long id,
                                           @RequestBody DoctorDTO doctorDTO) {
         try {
@@ -102,6 +105,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteDoctor(@PathVariable Long id) {
         try {
 

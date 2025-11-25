@@ -29,6 +29,9 @@ public class User implements UserDetails{
 
     private String password;
 
+    @Column(name = "refresh_token", columnDefinition = "TEXT")
+    private String refreshToken;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -51,7 +54,7 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName()));
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName().name()));
         return authorityList;
     }
 
@@ -77,6 +80,6 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isActive != null && this.isActive;
     }
 }

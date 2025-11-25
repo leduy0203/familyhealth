@@ -5,6 +5,7 @@ import familyhealth.model.dto.MedicalResultDTO;
 import familyhealth.service.impl.MedicalResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,6 +35,7 @@ public class MedicalResultController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateMedicalResult(@PathVariable Long id,
                                         @RequestBody MedicalResultDTO medicalResultDTO){
         try{
@@ -45,6 +47,7 @@ public class MedicalResultController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteMedicalResult(@PathVariable Long id){
         try{
             medicalResultService.deleteMedicalResult(id);
