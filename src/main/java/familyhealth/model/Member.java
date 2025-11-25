@@ -1,11 +1,13 @@
 package familyhealth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import familyhealth.common.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Relation;
 import lombok.experimental.SuperBuilder;
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "members")
 @SuperBuilder
@@ -31,4 +33,7 @@ public class Member extends Person{
     @JoinColumn(name = "user_id", nullable = true)
     @JsonIgnore
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStatus memberStatus = MemberStatus.ACTIVE;
 }

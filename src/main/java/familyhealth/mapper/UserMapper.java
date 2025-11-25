@@ -1,5 +1,7 @@
 package familyhealth.mapper;
 
+
+import familyhealth.common.UserType;
 import familyhealth.model.User;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.Role;
@@ -68,12 +70,13 @@ public class UserMapper {
                 .build();
     }
 
-    public static User convertToUser(MemberRegisterDTO.UserAccount userAccount) {
+    public static User convertToUser(MemberRegisterDTO.UserAccount userAccount , Role role ) {
         if (userAccount == null) return null;
 
         return User.builder()
                 .phone(userAccount.getPhone())
                 .password(userAccount.getPassword())
+                .role(role)
                 .isActive(true)
                 .createdAt(LocalDateTime.now())
                 .build();

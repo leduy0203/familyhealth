@@ -55,6 +55,8 @@ public class MemberRegisterDTO {
         @JsonProperty("password")
         private String password;
 
+        private Long roleId;
+
     }
 }
 

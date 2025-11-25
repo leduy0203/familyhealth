@@ -5,15 +5,18 @@ import familyhealth.model.Member;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.request.MemberRegisterDTO;
 import familyhealth.model.dto.response.ApiResponse;
+import familyhealth.model.dto.response.PageResponse;
 import familyhealth.service.impl.MemberService;
 import familyhealth.service.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -24,10 +27,17 @@ public class MemberController {
     private final UserService userService;
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<String> getMember(@PathVariable Long id){
+    public ResponseEntity<?> getMember(@PathVariable Long id){
         try{
+
             Member member = memberService.getMember(id);
-            return ResponseEntity.ok("Get Member : " + member);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_MEMBER_SUCCESS)
+                    .data(member)
+                    .build()
+            );
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -36,6 +46,7 @@ public class MemberController {
     @PostMapping("/create")
     public ResponseEntity<?> createMember(@Valid @RequestBody MemberRegisterDTO request){
         try {
+
             Member member = memberService.createMember(request);
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -44,6 +55,7 @@ public class MemberController {
                     .data(member.getId())
                     .build()
             );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -63,17 +75,26 @@ public class MemberController {
     @DeleteMapping("/update/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id){
         try{
+
             memberService.deleteMember(id);
-            return ResponseEntity.ok("Delete Member : " + id);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(NO_CONTENT.value())
+                    .message(MessageKey.DELETED_MEMBERS_SUCCESS)
+                    .data(null)
+                    .build()
+            );
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/families")
-    public ResponseEntity<?> getMyFamilyMembers() {
+    public ResponseEntity<?> getMyFamilyMembers(@RequestParam(required = false) String[] search,
+                                                Pageable pageable) {
         try {
-            List<Member> members = memberService.getFamilyMembers();
+
+            PageResponse<List<Member>> members = memberService.getFamilyMembers(search,pageable);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(OK.value())
@@ -81,6 +102,7 @@ public class MemberController {
                     .data(members)
                     .build()
             );
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }

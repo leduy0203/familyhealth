@@ -3,5 +3,7 @@ public enum Relation {
     CHU_HO,
     VO,
     CHONG,
-    CON
+    CON,
+    BO,
+    ME
 }

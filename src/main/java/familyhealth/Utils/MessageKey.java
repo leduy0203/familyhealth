@@ -14,4 +14,6 @@ public class MessageKey {
     public static final String CREATE_USER_SUCCESS = "Create user successfully.";
     public static final String GET_ALL_MEMBERS_SUCCESS = "Get all family members successfully.";
     public static final String CREATE_MEMBER_SUCCESS = "Create member successfully.";
+    public static final String GET_MEMBER_SUCCESS = "Get member successfully.";
+    public static final String DELETED_MEMBERS_SUCCESS = "Deleted members successfully.";
 }

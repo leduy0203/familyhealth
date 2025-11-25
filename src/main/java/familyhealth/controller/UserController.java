@@ -77,6 +77,7 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
         try {
+
             this.userService.deleteUser(id);
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -85,6 +86,7 @@ public class UserController {
                     .data(null)
                     .build()
             );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -49,6 +49,7 @@ public class DoctorController {
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getDoctor(@PathVariable Long id) {
         try {
+
             DoctorDTO doctor = DoctorMapper.convertToDoctorDTO(doctorService.getDoctor(id));
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -57,6 +58,7 @@ public class DoctorController {
                     .data(doctor)
                     .build()
             );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -65,6 +67,7 @@ public class DoctorController {
     @PostMapping("/create")
     public ResponseEntity<?> createDoctor(@Valid @RequestBody DoctorRegisterDTO doctorRegisterDTO) {
         try {
+
             doctorService.createDoctor(doctorRegisterDTO);
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -82,6 +85,7 @@ public class DoctorController {
     public ResponseEntity<?> updateDoctor(@Valid @PathVariable Long id,
                                           @RequestBody DoctorDTO doctorDTO) {
         try {
+
             DoctorDTO doctor = DoctorMapper
                     .convertToDoctorDTO(doctorService.updateDoctor(id, doctorDTO));
 
@@ -91,6 +95,7 @@ public class DoctorController {
                     .data(doctor)
                     .build()
             );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -99,6 +104,7 @@ public class DoctorController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteDoctor(@PathVariable Long id) {
         try {
+
             doctorService.deleteDoctor(id);
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(NO_CONTENT.value())
@@ -106,6 +112,7 @@ public class DoctorController {
                     .data(null)
                     .build()
             );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

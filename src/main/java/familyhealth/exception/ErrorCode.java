@@ -11,7 +11,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(404, "Member not found", HttpStatus.NOT_FOUND),
     MEMBER_EXISTED(400, "Member existed", HttpStatus.BAD_REQUEST),
     DOCTOR_NOT_FOUND(404, "Doctor not found", HttpStatus.NOT_FOUND),
-    DOCTER_EXISTED(400, "Doctor existed", HttpStatus.BAD_REQUEST),
+    DOCTOR_EXISTED(400, "Doctor existed", HttpStatus.BAD_REQUEST),
     HOUSEHOLD_NOT_FOUND(404, "House hold not found", HttpStatus.NOT_FOUND),
     HOUSEHOLD_EXISTED(400, "House hold existed", HttpStatus.BAD_REQUEST),
     APPOINTMENT_NOT_FOUND(404, "Appointment not found", HttpStatus.NOT_FOUND),
@@ -29,7 +29,8 @@ public enum ErrorCode {
     SIGN_OUT_FAILED(400, "Sign out failed", HttpStatus.BAD_REQUEST),
     PHONE_ALREADY_EXISTS(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
     IDCARD_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
-    BHYT_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST);
+    BHYT_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_HEAD_OF_HOUSEHOLD(400,"Cannot delete head of household" , HttpStatus.BAD_REQUEST);
 //    ALREADY_HAS_WIFE(400, "Household already has a wife/ Member not a female", HttpStatus.BAD_REQUEST),
 //    ALREADY_HAS_HUSBAND(400, "Household already has a husband/ Member not a male", HttpStatus.BAD_REQUEST),
 //    MALE_CANNOT_HAVE_HUSBAND(400, "Male household head cannot have a husband", HttpStatus.BAD_REQUEST),

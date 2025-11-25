@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Expertise;
 import lombok.experimental.SuperBuilder;
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "doctors")
 @SuperBuilder
