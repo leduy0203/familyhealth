@@ -92,6 +92,7 @@ public class MemberController {
     }
 
     @GetMapping("/families")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT_HOUSEHOLD' ,'PATIENT')")
     public ResponseEntity<?> getMyFamilyMembers(@RequestParam(required = false) String[] search,
                                                 Pageable pageable) {
         try {

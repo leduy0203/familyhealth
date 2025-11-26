@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import familyhealth.model.User;
 
@@ -37,6 +39,7 @@ public class DoctorService implements IDoctorService {
     private final UserRepository userRepository;
     private final UserService userService;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Doctor getDoctor(Long id) {
@@ -45,6 +48,8 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional(rollbackOn = Exception.class)
     public Doctor createDoctor(DoctorRegisterDTO request) {
 
         if (userRepository.existsByPhone(request.getPhone())) {
@@ -55,8 +60,10 @@ public class DoctorService implements IDoctorService {
                 .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         User user = UserMapper.convertToUser(request, role);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         this.userRepository.save(user);
         Doctor doctor = DoctorMapper.convertToDoctor(request, user);
+
         return doctorRepository.save(doctor);
     }
 

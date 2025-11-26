@@ -21,5 +21,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.household.id = :householdId AND m.memberStatus = 'ACTIVE'")
     Page<Member> findActiveMembersByHousehold(Long householdId, Pageable pageable);
 
-
 }

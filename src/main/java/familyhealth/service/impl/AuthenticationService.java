@@ -99,10 +99,10 @@ public class AuthenticationService implements IAuthService {
 
     @Override
     public void signOut(HttpServletResponse response) {
-        String phone = SecurityUtils.
-                getCurrentLogin().orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
 
-        User user = userRepository.findByPhone(phone)
+        String currentUserPhone = SecurityUtils.getCurrentLogin().orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        User user = userRepository.findByPhone(currentUserPhone)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setRefreshToken(null);
@@ -110,7 +110,7 @@ public class AuthenticationService implements IAuthService {
 
         ResponseCookie cookie = createRefreshTokenCookie(null, false);
         response.addHeader("Set-Cookie", cookie.toString());
-        log.info("Sign out successful for phone: {}", phone);
+        log.info("Sign out successful for phone: {}", currentUserPhone);
     }
 
     private ResponseCookie createRefreshTokenCookie(String token, boolean isCreate) {

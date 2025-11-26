@@ -26,7 +26,6 @@ public class UserMapper {
 
         return User.builder()
                 .phone(request.getPhone())
-                .password(request.getPassword())
                 .isActive(request.getIsActive() != null ? request.getIsActive() : true)
                 .createdAt(LocalDateTime.now())
                 .role(role)

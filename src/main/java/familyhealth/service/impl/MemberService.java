@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class MemberService implements IMemberService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public PageResponse<List<Member>> getFamilyMembers(String[] search, Pageable pageable) {
@@ -94,8 +96,14 @@ public class MemberService implements IMemberService {
         User newUser = null;
 
         if (request.getUserAccount() != null && isValidUserAccount(request.getUserAccount())) {
+
             Role role = roleService.getRole(request.getUserAccount().getRoleId());
-            newUser = this.userRepository.save(UserMapper.convertToUser(request.getUserAccount() , role));
+
+            User userEntity = UserMapper.convertToUser(request.getUserAccount(), role);
+
+            userEntity.setPassword(passwordEncoder.encode(request.getUserAccount().getPassword()));
+
+            newUser = userRepository.save(userEntity);
         }
 
         Member newMember = MemberMapper.convertToMember(request, newUser, household);

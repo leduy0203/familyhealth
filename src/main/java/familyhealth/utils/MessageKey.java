@@ -8,7 +8,6 @@ public class MessageKey {
     public static final String GET_DOCTOR_SUCCESS    = "Get doctor successfully.";
     public static final String GET_APPOINTMENT_SUCCESS    = "Get appointment successfully.";
     public static final String GET_LIST_DOCTOR_SUCCESS    = "Get list doctor successfully.";
-
     public static final String GET_LIST_USER_SUCCESS = "Get list user successfully.";
     public static final String CHANGE_STATUS_USER_SUCCESS = "Change status user successfully.";
     public static final String CREATE_USER_SUCCESS = "Create user successfully.";
@@ -19,4 +18,6 @@ public class MessageKey {
     public static final String SIGN_IN_SUCCESS = "Sign in successfully.";
     public static final String REFRESH_TOKEN_SUCCESS = "Refresh token successfully.";
     public static final String LOGOUT_SUCCESS = "Logout successfully.";
+    public static final String CREATE_APPOINTMENT_SUCCESS = "Create appointment successfully.";
+    public static final String GET_LIST_APPOINTMENT_SUCCESS = "Get list appointment successfully.";
 }
