@@ -11,9 +11,11 @@ import familyhealth.model.dto.response.SignInResponse;
 import familyhealth.repository.UserRepository;
 import familyhealth.service.IAuthService;
 import familyhealth.service.IJwtService;
+import familyhealth.utils.SecurityUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
@@ -96,8 +98,10 @@ public class AuthenticationService implements IAuthService {
     }
 
     @Override
-    public void signOut(LogoutRequest request, HttpServletResponse response) {
-        String phone = jwtService.extractUserName(request.getAccessToken());
+    public void signOut(HttpServletResponse response) {
+        String phone = SecurityUtils.
+                getCurrentLogin().orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 

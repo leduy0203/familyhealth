@@ -17,4 +17,6 @@ public class MessageKey {
     public static final String GET_MEMBER_SUCCESS = "Get member successfully.";
     public static final String DELETED_MEMBERS_SUCCESS = "Deleted members successfully.";
     public static final String SIGN_IN_SUCCESS = "Sign in successfully.";
+    public static final String REFRESH_TOKEN_SUCCESS = "Refresh token successfully.";
+    public static final String LOGOUT_SUCCESS = "Logout successfully.";
 }

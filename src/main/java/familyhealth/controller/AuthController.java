@@ -7,6 +7,7 @@ import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.RefreshTokenResponse;
 import familyhealth.model.dto.response.SignInResponse;
 import familyhealth.service.IAuthService;
+import familyhealth.utils.MessageKey;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class AuthController {
 
         return ApiResponse.<SignInResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Sign in success")
+                .message(MessageKey.SIGN_IN_SUCCESS)
                 .data(result)
                 .build();
     }
@@ -48,19 +49,19 @@ public class AuthController {
 
         return ApiResponse.<RefreshTokenResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Refreshed token success")
+                .message(MessageKey.REFRESH_TOKEN_SUCCESS)
                 .data(result)
                 .build();
     }
 
-    @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody @Valid LogoutRequest request, HttpServletResponse response) {
+    @GetMapping("/logout")
+    ApiResponse<Void> logout(HttpServletResponse response) {
 
-        authenticationService.signOut(request, response);
+        authenticationService.signOut(response);
 
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
-                .message("Sign out success")
+                .message(MessageKey.LOGOUT_SUCCESS)
                 .build();
     }
 }
