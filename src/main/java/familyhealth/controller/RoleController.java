@@ -1,5 +1,6 @@
 package familyhealth.controller;
 
+import familyhealth.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +14,7 @@ import familyhealth.service.impl.RoleService;
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
-    final private RoleService roleService;
+    final private IRoleService roleService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getRole(@PathVariable Long id){

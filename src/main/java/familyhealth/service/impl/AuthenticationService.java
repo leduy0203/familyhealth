@@ -10,12 +10,13 @@ import familyhealth.model.dto.response.RefreshTokenResponse;
 import familyhealth.model.dto.response.SignInResponse;
 import familyhealth.repository.UserRepository;
 import familyhealth.service.IAuthService;
-import familyhealth.service.JwtService;
-import jakarta.servlet.http.Cookie;
+import familyhealth.service.IJwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,8 +31,11 @@ import java.util.Objects;
 public class AuthenticationService implements IAuthService {
     
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final IJwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    
+    @Value("${jwt.expiration}") // 14 days default
+    private long refreshTokenExpiration;
 
     @Override
     public SignInResponse signIn(SignInRequest request, HttpServletResponse response) {
@@ -47,14 +51,8 @@ public class AuthenticationService implements IAuthService {
         user.setRefreshToken(refreshToken);
         userRepository.save(user);
 
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setDomain("localhost");
-        cookie.setPath("/");
-        cookie.setMaxAge(14 * 24 * 60 * 60); // 2 tuần
-
-        response.addCookie(cookie);
+        ResponseCookie cookie = createRefreshTokenCookie(refreshToken, true);
+        response.addHeader("Set-Cookie", cookie.toString());
 
         return SignInResponse.builder()
                 .accessToken(accessToken)
@@ -65,15 +63,18 @@ public class AuthenticationService implements IAuthService {
 
     @Override
     public RefreshTokenResponse refreshToken(String refreshToken) {
-        log.info("refresh token");
+
         if (StringUtils.isBlank(refreshToken)) {
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
+
         String phone = jwtService.extractUserName(refreshToken);
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        
-        if(!Objects.equals(refreshToken, user.getRefreshToken()) || StringUtils.isBlank(user.getRefreshToken())) {
+
+        boolean check = refreshToken.equals(user.getRefreshToken());
+
+        if(!check || StringUtils.isBlank(user.getRefreshToken())) {
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
@@ -103,16 +104,18 @@ public class AuthenticationService implements IAuthService {
         user.setRefreshToken(null);
         userRepository.save(user);
 
-        deleteRefreshTokenCookie(response);
+        ResponseCookie cookie = createRefreshTokenCookie(null, false);
+        response.addHeader("Set-Cookie", cookie.toString());
         log.info("Sign out successful for phone: {}", phone);
     }
 
-    private void deleteRefreshTokenCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("refreshToken", "");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    private ResponseCookie createRefreshTokenCookie(String token, boolean isCreate) {
+        return ResponseCookie.from("refreshToken", isCreate ? token : "")
+                .httpOnly(true)
+                .secure(false) 
+                .path("/familyhealth") 
+                .sameSite("Lax") 
+                .maxAge(isCreate ? refreshTokenExpiration : 0)
+                .build();
     }
 }

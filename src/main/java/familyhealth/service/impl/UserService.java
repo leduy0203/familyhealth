@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
@@ -40,6 +41,7 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
     private final HouseholdRepository householdRepository;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUser(Long id) {
@@ -59,28 +61,31 @@ public class UserService implements IUserService {
         Role role = roleRepository.findById(request.getRoleId())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         User user = UserMapper.convertToUser(request, role);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User userCreated = this.userRepository.save(user);
 
-        Household householdCreated = HouseHoldMapper.convertToHousehold(request);
-        this.householdRepository.save(householdCreated);
-
-        if (this.memberRepository.existsByIdCard(request.getMemberInfo().getCccd())) {
-            throw new AppException(ErrorCode.IDCARD_EXISTED);
-        }
-
-        if (this.memberRepository.existsByBhyt(request.getMemberInfo().getBhyt())) {
-            throw new AppException(ErrorCode.BHYT_EXISTED);
-        }
-
-        Member newMember = MemberMapper.convertToMember(request ,householdCreated , userCreated);
-        if (newMember != null) {
-
-            Member member = this.memberRepository.save(newMember);
-
-            householdCreated.setHouseheadId(member.getId());
-
+        if (request.getMemberInfo() != null){
+            Household householdCreated = HouseHoldMapper.convertToHousehold(request);
             this.householdRepository.save(householdCreated);
+
+            if (this.memberRepository.existsByIdCard(request.getMemberInfo().getCccd())) {
+                throw new AppException(ErrorCode.IDCARD_EXISTED);
+            }
+
+            if (this.memberRepository.existsByBhyt(request.getMemberInfo().getBhyt())) {
+                throw new AppException(ErrorCode.BHYT_EXISTED);
+            }
+
+            Member newMember = MemberMapper.convertToMember(request ,householdCreated , userCreated);
+            if (newMember != null) {
+
+                Member member = this.memberRepository.save(newMember);
+
+                householdCreated.setHouseheadId(member.getId());
+
+                this.householdRepository.save(householdCreated);
+            }
         }
 
         return userCreated;
@@ -114,6 +119,13 @@ public class UserService implements IUserService {
                 .meta(meta)
                 .result(userResponses)
                 .build();
+    }
+
+    @Override
+    public User getUserByPhone(String phone) {
+        return this.userRepository.findByPhone(phone)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
     }
 
 

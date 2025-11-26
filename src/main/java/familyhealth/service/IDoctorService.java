@@ -7,6 +7,8 @@ import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.model.dto.response.PageResponse;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 
 public interface IDoctorService {
     Doctor getDoctor(Long id);
@@ -14,5 +16,5 @@ public interface IDoctorService {
     Doctor updateDoctor(Long id, DoctorDTO doctorDTO);
     void deleteDoctor(Long id);
 
-    PageResponse getAllDoctors(String[] search, Pageable pageable);
+    PageResponse<List<DoctorDTO>> getAllDoctors(String[] search, Pageable pageable);
 }

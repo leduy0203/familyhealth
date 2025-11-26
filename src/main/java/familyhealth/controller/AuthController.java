@@ -1,11 +1,12 @@
 package familyhealth.controller;
 
 import familyhealth.model.dto.request.LogoutRequest;
+import familyhealth.model.dto.request.RefreshTokenRequest;
 import familyhealth.model.dto.request.SignInRequest;
 import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.RefreshTokenResponse;
 import familyhealth.model.dto.response.SignInResponse;
-import familyhealth.service.impl.AuthenticationService;
+import familyhealth.service.IAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthController {
     
-    private final AuthenticationService authenticationService;
+    private final IAuthService authenticationService;
     
     @PostMapping("/sign-in")
     ApiResponse<SignInResponse> signIn(@RequestBody @Valid SignInRequest request,
                                        HttpServletResponse response) {
+
         var result = authenticationService.signIn(request, response);
+
         return ApiResponse.<SignInResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Sign in success")
@@ -33,8 +36,16 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    ApiResponse<RefreshTokenResponse> refreshToken(@CookieValue(name = "refreshToken") String refreshToken) {
+    ApiResponse<RefreshTokenResponse> refreshToken(
+            @CookieValue(name = "refreshToken", required = false) String refreshTokenFromCookie,
+            @RequestBody(required = false) RefreshTokenRequest request) {
+
+        String refreshToken = (request != null && request.getRefreshToken() != null) 
+                ? request.getRefreshToken() 
+                : refreshTokenFromCookie;
+        
         var result = authenticationService.refreshToken(refreshToken);
+
         return ApiResponse.<RefreshTokenResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Refreshed token success")
@@ -44,7 +55,9 @@ public class AuthController {
 
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody @Valid LogoutRequest request, HttpServletResponse response) {
+
         authenticationService.signOut(request, response);
+
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Sign out success")

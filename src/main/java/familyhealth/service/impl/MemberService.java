@@ -17,6 +17,7 @@ import familyhealth.model.dto.response.UserResponse;
 import familyhealth.repository.MemberRepository;
 import familyhealth.repository.UserRepository;
 import familyhealth.service.IMemberService;
+import familyhealth.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,17 @@ public class MemberService implements IMemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final UserService userService;
 
     @Override
     public PageResponse<List<Member>> getFamilyMembers(String[] search, Pageable pageable) {
-        Long userId = 1L; // GetCurrentUserId.get();
-        Optional<Member> currentUserMember = memberRepository.findByUserId(userId);
+
+        String phone = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        User currentUser = userService.getUserByPhone(phone);
+
+        Optional<Member> currentUserMember = memberRepository.findByUserId(currentUser.getId());
 
         if (currentUserMember.isEmpty()) {
             throw new AppException(ErrorCode.MEMBER_NOT_FOUND);
@@ -73,9 +80,13 @@ public class MemberService implements IMemberService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Member createMember(MemberRegisterDTO request) {
-        Long currentUserId = 1L; // GetCurrentUserId.get();
 
-        Member currentMember = memberRepository.findByUserId(currentUserId)
+        String currentUserPhone = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        User currentUser = userService.getUserByPhone(currentUserPhone);
+
+        Member currentMember = memberRepository.findByUserId(currentUser.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
         Household household = currentMember.getHousehold();

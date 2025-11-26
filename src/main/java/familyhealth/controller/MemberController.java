@@ -1,13 +1,13 @@
 package familyhealth.controller;
 
-import familyhealth.Utils.MessageKey;
+import familyhealth.utils.MessageKey;
 import familyhealth.model.Member;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.request.MemberRegisterDTO;
 import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.PageResponse;
-import familyhealth.service.impl.MemberService;
-import familyhealth.service.impl.UserService;
+import familyhealth.service.IMemberService;
+import familyhealth.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +24,8 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
 public class MemberController {
-    private final MemberService memberService;
-    private final UserService userService;
+    private final IMemberService memberService;
+    private final IUserService userService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getMember(@PathVariable Long id){

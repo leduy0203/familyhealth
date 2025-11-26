@@ -2,7 +2,7 @@ package familyhealth.controller;
 
 import familyhealth.model.Household;
 import familyhealth.model.dto.HouseholdDTO;
-import familyhealth.service.impl.HouseholdService;
+import familyhealth.service.IHouseholdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/households")
 @RequiredArgsConstructor
 public class HouseholdController {
-    final private HouseholdService householdService;
+    final private IHouseholdService householdService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getHousehold(@PathVariable Long id){

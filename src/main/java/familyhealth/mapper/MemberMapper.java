@@ -1,5 +1,6 @@
 package familyhealth.mapper;
 
+import familyhealth.common.MemberStatus;
 import familyhealth.common.Relation;
 import familyhealth.model.Household;
 import familyhealth.model.Member;
@@ -64,6 +65,7 @@ public class MemberMapper {
                 .relation(request.getRelation())
                 .bhyt(request.getBhyt())
                 .household(household)
+                .memberStatus(MemberStatus.ACTIVE)
                 .user(newUser)
                 .build();
     }

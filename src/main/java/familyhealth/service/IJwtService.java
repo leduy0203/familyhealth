@@ -4,7 +4,7 @@ import com.nimbusds.jose.JOSEException;
 import familyhealth.model.User;
 import java.text.ParseException;
 
-public interface JwtService {
+public interface IJwtService {
     String generateAccessToken(User user);
     String generateRefreshToken(User user);
     String extractUserName(String accessToken);

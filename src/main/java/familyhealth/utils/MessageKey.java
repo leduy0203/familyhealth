@@ -1,4 +1,4 @@
-package familyhealth.Utils;
+package familyhealth.utils;
 
 
 public class MessageKey {

@@ -1,10 +1,10 @@
 package familyhealth.controller;
 
-import familyhealth.Utils.MessageKey;
+import familyhealth.utils.MessageKey;
 import familyhealth.model.Appointment;
 import familyhealth.model.dto.AppointmentDTO;
 import familyhealth.model.dto.response.ApiResponse;
-import familyhealth.service.impl.AppointmentService;
+import familyhealth.service.IAppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/appointments")
 public class AppointmentController {
-    private final AppointmentService appointmentService;
+    private final IAppointmentService appointmentService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getAppointment(@PathVariable Long id){

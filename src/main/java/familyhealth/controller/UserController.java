@@ -1,18 +1,21 @@
 package familyhealth.controller;
 
-import familyhealth.Utils.MessageKey;
+import familyhealth.exception.AppException;
+import familyhealth.exception.ErrorCode;
+import familyhealth.mapper.UserMapper;
+import familyhealth.utils.MessageKey;
 import familyhealth.model.dto.request.UserRequestDTO;
 import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.model.dto.response.UserResponse;
-import familyhealth.service.impl.UserService;
+import familyhealth.service.IUserService;
+import familyhealth.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import familyhealth.model.User;
-import familyhealth.model.dto.UserDTO;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<String> getUser(@PathVariable Long id) {
@@ -68,6 +71,28 @@ public class UserController {
                     .code(CREATED.value())
                     .message(MessageKey.CREATE_USER_SUCCESS)
                     .data(userNew.getId())
+                    .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/me/profile")
+    public ResponseEntity<?> getProfile() {
+        try {
+
+            String phone = SecurityUtils.getCurrentLogin()
+                    .orElseThrow(()-> new AppException(ErrorCode.UNAUTHORIZED));
+
+
+            User user = userService.getUserByPhone(phone);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(CREATED.value())
+                    .message(MessageKey.CREATE_USER_SUCCESS)
+                    .data(UserMapper.convertToUserResponse(user))
                     .build()
             );
 

@@ -1,17 +1,16 @@
 package familyhealth.controller;
 
-import familyhealth.Utils.MessageKey;
+import familyhealth.utils.MessageKey;
 import familyhealth.mapper.DoctorMapper;
 import familyhealth.model.Doctor;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.model.dto.response.PageResponse;
-import familyhealth.service.impl.DoctorService;
+import familyhealth.service.IDoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/api/v1/doctors")
 public class DoctorController {
 
-    private final DoctorService doctorService;
+    private final IDoctorService doctorService;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors(
@@ -70,11 +69,12 @@ public class DoctorController {
     public ResponseEntity<?> createDoctor(@Valid @RequestBody DoctorRegisterDTO doctorRegisterDTO) {
         try {
 
-            doctorService.createDoctor(doctorRegisterDTO);
+            Doctor doctor = doctorService.createDoctor(doctorRegisterDTO);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(CREATED.value())
                     .message(MessageKey.CREATE_DOCTOR_SUCCESS)
+                    .data(doctor.getId())
                     .build()
             );
 

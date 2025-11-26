@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
 import familyhealth.model.User;
-import familyhealth.service.JwtService;
+import familyhealth.service.IJwtService;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -22,7 +22,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "JWT-SERVICE")
-public class JwtServiceImpl implements JwtService {
+public class JwtServiceImpl implements IJwtService {
 
     @Value("${jwt.secretKey}")
     private String secretKey;

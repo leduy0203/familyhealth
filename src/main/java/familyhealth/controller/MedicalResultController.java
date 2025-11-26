@@ -2,6 +2,7 @@ package familyhealth.controller;
 
 import familyhealth.model.MedicalResult;
 import familyhealth.model.dto.MedicalResultDTO;
+import familyhealth.service.IMedicalResultService;
 import familyhealth.service.impl.MedicalResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/medical_results")
 public class MedicalResultController {
-    private final MedicalResultService medicalResultService;
+    private final IMedicalResultService medicalResultService;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getMedicalResult(@PathVariable Long id){

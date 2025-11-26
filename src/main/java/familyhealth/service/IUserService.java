@@ -13,4 +13,6 @@ public interface IUserService {
     User getUser(Long id);
     void deleteUser(Long id);
     PageResponse<List<UserResponse>> getAllUsers(String[] search, Pageable pageable);
+
+    User getUserByPhone(String phone);
 }

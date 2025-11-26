@@ -15,7 +15,7 @@ import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
 import familyhealth.model.User;
 import familyhealth.repository.UserRepository;
-import familyhealth.service.JwtService;
+import familyhealth.service.IJwtService;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -31,7 +31,7 @@ public class JwtDecoderCustomizer implements JwtDecoder {
     private String secretKey;
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final IJwtService jwtService;
     private NimbusJwtDecoder nimbusJwtDecoder;
 
     @Override
