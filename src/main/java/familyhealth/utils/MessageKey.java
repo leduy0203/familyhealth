@@ -20,4 +20,5 @@ public class MessageKey {
     public static final String LOGOUT_SUCCESS = "Logout successfully.";
     public static final String CREATE_APPOINTMENT_SUCCESS = "Create appointment successfully.";
     public static final String GET_LIST_APPOINTMENT_SUCCESS = "Get list appointment successfully.";
+    public static final String GET_APPOINTMENT_BY_DOCTOR = "Get appointments by doctor successfully.";
 }

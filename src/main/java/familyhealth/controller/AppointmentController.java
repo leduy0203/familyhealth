@@ -1,6 +1,7 @@
 package familyhealth.controller;
 
 import familyhealth.model.dto.DoctorDTO;
+import familyhealth.model.dto.request.ChangeStatusRequest;
 import familyhealth.model.dto.response.AppointmentResponse;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.utils.MessageKey;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -104,6 +104,43 @@ public class AppointmentController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/doctor-appointments")
+    @PreAuthorize("hasAnyRole('DOCTOR' , 'ADMIN')")
+    public ApiResponse<PageResponse<List<AppointmentResponse>>> getAppointmentsByDoctor(
+            @RequestParam(value = "status", required = false) String status,
+            Pageable pageable ,@RequestParam(required = false) String[] search
+    ) {
+
+        try{
+            PageResponse<List<AppointmentResponse>> result =
+                    appointmentService.getAppointmentsByDoctor(status , search, pageable);
+
+            return ApiResponse.<PageResponse<List<AppointmentResponse>>>builder()
+                    .code(200)
+                    .message(MessageKey.GET_APPOINTMENT_BY_DOCTOR)
+                    .data(result)
+                    .build();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @PatchMapping("/change-status")
+    public ApiResponse<?> changeStatus(
+            @RequestBody ChangeStatusRequest request
+    ) {
+
+        this.appointmentService.changeStatus(request);
+
+        return ApiResponse.<PageResponse<List<AppointmentResponse>>>builder()
+                .code(ACCEPTED.value())
+                .message(MessageKey.GET_APPOINTMENT_BY_DOCTOR)
+                .data(null)
+                .build();
     }
 
 }

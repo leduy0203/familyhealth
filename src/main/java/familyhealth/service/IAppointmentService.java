@@ -2,6 +2,7 @@ package familyhealth.service;
 
 import familyhealth.model.Appointment;
 import familyhealth.model.dto.AppointmentDTO;
+import familyhealth.model.dto.request.ChangeStatusRequest;
 import familyhealth.model.dto.response.AppointmentResponse;
 import familyhealth.model.dto.response.PageResponse;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,8 @@ public interface IAppointmentService {
     Appointment createAppointment(AppointmentDTO appointmentDTO);
     Appointment updateAppointment(Long id, AppointmentDTO appointmentDTO);
     void deleteAppointment(Long id);
+
+    PageResponse<List<AppointmentResponse>> getAppointmentsByDoctor(String status , String[] search, Pageable pageable);
+
+    void changeStatus(ChangeStatusRequest request);
 }

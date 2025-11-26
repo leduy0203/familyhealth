@@ -1,5 +1,6 @@
 package familyhealth.repository;
 
+import familyhealth.common.AppointmentStatus;
 import familyhealth.model.Appointment;
 import familyhealth.model.Member;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a WHERE a.member IN :members")
     Page<Appointment> findAllByMembers(@Param("members") List<Member> members , Pageable pageable);
+
+    Page<Appointment> findAllByDoctor_IdAndStatus(
+            Long doctorId,
+            AppointmentStatus status,
+            Pageable pageable
+    );
+
+    Page<Appointment> findAllByDoctor_Id(Long doctorId, Pageable pageable);
 }

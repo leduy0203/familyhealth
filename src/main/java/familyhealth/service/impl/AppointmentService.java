@@ -6,6 +6,7 @@ import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.AppointmentMapper;
 import familyhealth.model.*;
 import familyhealth.model.dto.AppointmentDTO;
+import familyhealth.model.dto.request.ChangeStatusRequest;
 import familyhealth.model.dto.response.AppointmentResponse;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.repository.AppointmentRepository;
@@ -97,5 +98,71 @@ public class AppointmentService implements IAppointmentService {
     public void deleteAppointment(Long id) {
         Appointment appointment = getAppointment(id);
         appointment.setStatus(AppointmentStatus.CANCELLED);
+    }
+
+    @Override
+    public PageResponse<List<AppointmentResponse>> getAppointmentsByDoctor(String status ,String[] search, Pageable pageable) {
+
+        String currentPhone = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        User currentUser = userService.getUserByPhone(currentPhone);
+
+        if (currentUser.getDoctor() == null) {
+            throw new AppException(ErrorCode.DOCTOR_NOT_FOUND);
+        }
+
+        Long doctorId = currentUser.getDoctor().getId();
+
+        Page<Appointment> appointments = null;
+
+        if (status == null){
+            appointments = this.appointmentRepository.findAllByDoctor_Id(doctorId, pageable);
+        } else if (status.equals(AppointmentStatus.CONFIRMED.name())) {
+            appointments = this.appointmentRepository.findAllByDoctor_IdAndStatus(doctorId, AppointmentStatus.CONFIRMED, pageable);
+        }else if (status.equals(AppointmentStatus.SCHEDULED.name())) {
+            appointments = this.appointmentRepository.findAllByDoctor_IdAndStatus(doctorId, AppointmentStatus.SCHEDULED, pageable);
+        } else if (status.equals(AppointmentStatus.COMPLETED.name())) {
+            appointments = this.appointmentRepository.findAllByDoctor_IdAndStatus(doctorId, AppointmentStatus.COMPLETED, pageable);
+        }
+
+        if (appointments == null || appointments.isEmpty()) {
+            return PageResponse.<List<AppointmentResponse>>builder()
+                    .meta(new PageResponse.Meta())
+                    .result(List.of())
+                    .build();
+        }
+
+        List<AppointmentResponse> result = appointments.getContent()
+                .stream()
+                .map(AppointmentMapper::convertToAppointmentResponse)
+                .toList();
+
+        PageResponse.Meta meta = new PageResponse.Meta();
+        meta.setPage(appointments.getNumber());
+        meta.setPageSize(appointments.getSize());
+        meta.setPages(appointments.getTotalPages());
+        meta.setTotal(appointments.getTotalElements());
+
+        return PageResponse.<List<AppointmentResponse>>builder()
+                .meta(meta)
+                .result(result)
+                .build();
+    }
+
+    @Override
+    public void changeStatus(ChangeStatusRequest request) {
+
+        Appointment appointment = getAppointment(request.getAppointmentId());
+
+        AppointmentStatus newStatus;
+
+        try {
+            newStatus = AppointmentStatus.valueOf(request.getStatus());
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ErrorCode.INVALID_APPOINTMENT_STATUS);
+        }
+        appointment.setStatus(newStatus);
+        this.appointmentRepository.save(appointment);
     }
 }

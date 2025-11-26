@@ -1,5 +1,6 @@
 package familyhealth.controller;
 
+import familyhealth.model.dto.response.AppointmentResponse;
 import familyhealth.utils.MessageKey;
 import familyhealth.mapper.DoctorMapper;
 import familyhealth.model.Doctor;
@@ -121,5 +122,7 @@ public class DoctorController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 
 }
