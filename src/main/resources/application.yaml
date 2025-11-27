@@ -3,6 +3,18 @@ server:
   servlet:
     context-path: /familyhealth
 spring:
+
+  ai:
+    openai:
+      api-key: AIzaSyAmYgRbDrp8PtYdrMPoF2CrE7DRmx4Gf0M
+      chat:
+        base-url: https://generativelanguage.googleapis.com
+        completions-path: /v1beta/openai/chat/completions
+        options:
+          model: gemini-2.0-flash
+      embedding:
+        enabled: false
+
   datasource:
     url: jdbc:mysql://localhost:3306/familyhealth
     username: root
@@ -50,3 +62,5 @@ openapi:
     title: Familyhealth API Documentation
     version: v1.1.0
     serverUrl: http://localhost:${server.port}/familyhealth
+
+
