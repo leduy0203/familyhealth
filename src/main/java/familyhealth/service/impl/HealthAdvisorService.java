@@ -27,7 +27,7 @@ public class HealthAdvisorService implements IHealthAdvisorService {
     private final VectorStore vectorStore;
     
     private static final String COMBINED_CONSULTATION_TEMPLATE = """
-            Bạn là bác sĩ tư vấn chuyên nghiệp. Hãy phân tích tình trạng của bệnh nhân và đưa ra tư vấn toàn diện bằng tiếng Việt.
+            Bạn là bác sĩ tư vấn chuyên nghiệp. Hãy phân tích tình trạng của bệnh nhân và đưa ra tư vấn bằng tiếng Việt.
             
             Thông tin bệnh nhân:
             - Triệu chứng: {symptoms}
@@ -38,17 +38,16 @@ public class HealthAdvisorService implements IHealthAdvisorService {
             Danh sách bác sĩ phù hợp:
             {doctorContext}
             
-            Vui lòng cung cấp:
-            1. Phân tích ngắn gọn về triệu chứng
-            2. Lời khuyên và hướng dẫn chăm sóc sức khỏe
-            3. Mức độ nghiêm trọng (LOW, MEDIUM, HIGH)
-            4. Hành động khuyến nghị (REST, HOME_CARE, SEE_DOCTOR, EMERGENCY)
-            5. Có cần gặp bác sĩ không (true/false)
-            6. Top 3 bác sĩ phù hợp nhất từ danh sách (nếu requiresDoctor = true)
+            Yêu cầu:
+            1. Viết lời khuyên ngắn gọn, dễ hiểu, KHÔNG dùng markdown (*, **, #, bullets)
+            2. Viết thành đoạn văn tự nhiên, như đang nói chuyện trực tiếp
+            3. Tối đa 3-4 câu ngắn gọn về triệu chứng và cách xử lý
+            4. KHÔNG hỏi lại thông tin bệnh nhân
+            5. KHÔNG liệt kê danh sách gạch đầu dòng
             
             Trả về dưới dạng JSON:
             {{
-              "advice": "lời khuyên chi tiết bằng tiếng Việt",
+              "advice": "lời khuyên ngắn gọn bằng văn xuôi, không có ký tự markdown",
               "severity": "LOW|MEDIUM|HIGH",
               "recommendedAction": "REST|HOME_CARE|SEE_DOCTOR|EMERGENCY",
               "requiresDoctor": true/false,
@@ -57,7 +56,7 @@ public class HealthAdvisorService implements IHealthAdvisorService {
               ]
             }}
             
-            Lưu ý: Đây chỉ là lời khuyên chung. Đối với các trường hợp nghiêm trọng, luôn khuyến nghị gặp bác sĩ chuyên khoa.
+            Ví dụ advice tốt: "Triệu chứng đau đầu và buồn nôn có thể do nhiều nguyên nhân như căng thẳng, mất ngủ hoặc vấn đề tiêu hóa. Bạn nên nghỉ ngơi trong phòng tối, uống nhiều nước và tránh ánh sáng chói. Nếu tình trạng không cải thiện sau 24 giờ hoặc có thêm triệu chứng như sốt cao, đau dữ dội, hãy đến bệnh viện ngay."
             """;
     
     @Override
