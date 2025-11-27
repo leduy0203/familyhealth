@@ -24,5 +24,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             Pageable pageable
     );
 
+    @Query("""
+    SELECT a
+    FROM Appointment a
+    JOIN FETCH a.medicalResult mr
+    WHERE a.status = 'COMPLETED'
+""")
+    Page<Appointment> findAllCompletedWithMedicalResult(Pageable pageable);
+
+
     Page<Appointment> findAllByDoctor_Id(Long doctorId, Pageable pageable);
 }

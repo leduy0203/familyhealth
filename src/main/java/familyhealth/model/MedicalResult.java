@@ -33,7 +33,7 @@ public class MedicalResult {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;
 }

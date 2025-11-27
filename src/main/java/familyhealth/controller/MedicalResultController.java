@@ -2,12 +2,18 @@ package familyhealth.controller;
 
 import familyhealth.model.MedicalResult;
 import familyhealth.model.dto.MedicalResultDTO;
+import familyhealth.model.dto.response.ApiResponse;
 import familyhealth.service.IMedicalResultService;
 import familyhealth.service.impl.MedicalResultService;
+import familyhealth.utils.MessageKey;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +32,18 @@ public class MedicalResultController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> creatMedicalResult(@RequestBody MedicalResultDTO medicalResultDTO){
+    public ResponseEntity<?> createMedicalResult(@Valid @RequestBody MedicalResultDTO medicalResultDTO){
         try{
+
             MedicalResult medicalResult = medicalResultService.createMedicalResult(medicalResultDTO);
-            return ResponseEntity.ok(medicalResult);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(CREATED.value())
+                    .message(MessageKey.CREATED_MEDICAL_RESULT_SUCCESS)
+                    .data(medicalResult.getId())
+                    .build()
+            );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

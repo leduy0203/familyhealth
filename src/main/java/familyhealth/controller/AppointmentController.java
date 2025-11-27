@@ -88,11 +88,12 @@ public class AppointmentController {
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllAppointment(
             @RequestParam(required = false) String[] search
+            ,@RequestParam(required = false, defaultValue = "false") boolean completedOnly
             , Pageable pageable){
         try{
 
             PageResponse<List<AppointmentResponse>> pageResponse = appointmentService
-                    .getAllAppointmentService(search, pageable);
+                    .getAllAppointmentService(search ,completedOnly, pageable);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(OK.value())
@@ -129,6 +130,28 @@ public class AppointmentController {
 
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<AppointmentResponse> getAppointmentById(
+            @PathVariable Long id
+    ) {
+        try{
+            AppointmentResponse result =
+                    appointmentService.getAppointmentDetails(id);
+
+            return ApiResponse.<AppointmentResponse>builder()
+                    .code(200)
+                    .message(MessageKey.GET_APPOINTMENT_BY_DOCTOR)
+                    .data(result)
+                    .build();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
     @PatchMapping("/change-status")
     public ApiResponse<?> changeStatus(
             @RequestBody ChangeStatusRequest request
@@ -138,7 +161,7 @@ public class AppointmentController {
 
         return ApiResponse.<PageResponse<List<AppointmentResponse>>>builder()
                 .code(ACCEPTED.value())
-                .message(MessageKey.GET_APPOINTMENT_BY_DOCTOR)
+                .message(MessageKey.CHANGE_STATUS_APPOINTMENT_SUCCESS)
                 .data(null)
                 .build();
     }

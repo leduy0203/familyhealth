@@ -31,8 +31,7 @@ public class AppointmentService implements IAppointmentService {
     private final MemberRepository memberRepository;
 
     @Override
-    public PageResponse<List<AppointmentResponse>> getAllAppointmentService(String[] search, Pageable pageable) {
-
+    public PageResponse<List<AppointmentResponse>> getAllAppointmentService(String[] search, boolean complete , Pageable pageable) {
 
         String currentPhone = SecurityUtils.getCurrentLogin()
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
@@ -55,7 +54,13 @@ public class AppointmentService implements IAppointmentService {
                     .build();
         }
 
-        Page<Appointment> appointments = this.appointmentRepository.findAllByMembers(members.getContent(), pageable);
+        Page<Appointment> appointments = null;
+
+        if (complete){
+            appointments = this.appointmentRepository.findAllCompletedWithMedicalResult(pageable);
+        } else {
+            appointments = this.appointmentRepository.findAllByMembers(members.getContent(), pageable);
+        }
 
 
         PageResponse.Meta meta = new PageResponse.Meta();
@@ -164,5 +169,10 @@ public class AppointmentService implements IAppointmentService {
         }
         appointment.setStatus(newStatus);
         this.appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public AppointmentResponse getAppointmentDetails(Long id) {
+        return AppointmentMapper.convertToAppointmentResponse(getAppointment(id));
     }
 }

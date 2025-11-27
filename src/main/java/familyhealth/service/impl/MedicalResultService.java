@@ -1,5 +1,6 @@
 package familyhealth.service.impl;
 
+import familyhealth.common.AppointmentStatus;
 import familyhealth.exception.AppException;
 import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.MedicalResultMapper;
@@ -8,6 +9,7 @@ import familyhealth.model.MedicalResult;
 import familyhealth.model.dto.MedicalResultDTO;
 import familyhealth.repository.MedicalResultRepository;
 import familyhealth.service.IMedicalResultService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,15 @@ public class MedicalResultService implements IMedicalResultService {
     }
 
     @Override
+    @Transactional
     public MedicalResult createMedicalResult(MedicalResultDTO medicalResultDTO) {
+
         Appointment appointment = appointmentService.getAppointment(medicalResultDTO.getAppointmentId());
+
+        appointment.setStatus(AppointmentStatus.COMPLETED);
+
         MedicalResult medicalResult = MedicalResultMapper.convertToMedicalResult(medicalResultDTO,appointment);
+
         return medicalResultRepository.save(medicalResult);
     }
 

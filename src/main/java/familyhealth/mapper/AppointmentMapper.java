@@ -43,6 +43,17 @@ public class AppointmentMapper {
             member.setBhyt(appointment.getMember().getBhyt());
         }
 
+        AppointmentResponse.MedicalResult medicalResult = null;
+        if (appointment.getMedicalResult() != null) {
+            medicalResult = new AppointmentResponse.MedicalResult();
+            medicalResult.setId(appointment.getMedicalResult().getId());
+            medicalResult.setName(appointment.getMedicalResult().getName());
+            medicalResult.setDiagnose(appointment.getMedicalResult().getDiagnose() != null
+                    ? appointment.getMedicalResult().getDiagnose() : null);
+            medicalResult.setNote(appointment.getMedicalResult().getNote());
+            medicalResult.setTotalMoney(appointment.getMedicalResult().getTotalMoney());
+        }
+
         AppointmentResponse response = new AppointmentResponse();
         response.setId(appointment.getId());
         response.setTime(appointment.getTime() != null ? appointment.getTime().toString() : null);
@@ -51,6 +62,7 @@ public class AppointmentMapper {
         response.setLocation(appointment.getLocation());
         response.setDoctor(doctor);
         response.setMember(member);
+        response.setMedicalResult(medicalResult);
 
         return response;
     }

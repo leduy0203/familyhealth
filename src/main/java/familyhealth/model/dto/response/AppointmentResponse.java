@@ -1,5 +1,6 @@
 package familyhealth.model.dto.response;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class AppointmentResponse {
     private String location;
     private Doctor doctor;
     private Member member;
+    private MedicalResult medicalResult;
 
 
     @Getter
@@ -33,4 +35,13 @@ public class AppointmentResponse {
         private String bhyt;
     }
 
+    @Getter
+    @Setter
+    public static class MedicalResult {
+        private Long id;
+        private String name;
+        private String note;
+        private String diagnose;
+        private Float totalMoney;
+    }
 }

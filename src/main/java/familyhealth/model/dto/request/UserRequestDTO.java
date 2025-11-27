@@ -1,6 +1,7 @@
 package familyhealth.model.dto.request;
 
 import familyhealth.common.Gender;
+import familyhealth.common.MemberStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;

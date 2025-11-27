@@ -34,7 +34,11 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+    private MedicalResult medicalResult;
+
 }

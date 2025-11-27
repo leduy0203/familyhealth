@@ -44,6 +44,7 @@ public class MemberMapper {
                 .address(dto.getAddress())
                 .gender(dto.getGender())
                 .bhyt(dto.getBhyt())
+                .memberStatus(MemberStatus.ACTIVE)
                 .dateOfBirth(dto.getDateOfBirth())
                 .relation(Relation.CHU_HO)
                 .household(household)
