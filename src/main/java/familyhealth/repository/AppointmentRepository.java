@@ -34,4 +34,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     Page<Appointment> findAllByDoctor_Id(Long doctorId, Pageable pageable);
+
+    @Query("SELECT DISTINCT a.member FROM Appointment a WHERE a.doctor.id = :doctorId")
+    List<Member> findPatientsByDoctorId(Long doctorId);
 }

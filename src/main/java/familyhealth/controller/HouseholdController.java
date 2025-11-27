@@ -2,11 +2,21 @@ package familyhealth.controller;
 
 import familyhealth.model.Household;
 import familyhealth.model.dto.HouseholdDTO;
+import familyhealth.model.dto.response.ApiResponse;
+import familyhealth.model.dto.response.AppointmentResponse;
+import familyhealth.model.dto.response.HouseHoldResponse;
+import familyhealth.model.dto.response.PageResponse;
 import familyhealth.service.IHouseholdService;
+import familyhealth.utils.MessageKey;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/households")
@@ -52,6 +62,25 @@ public class HouseholdController {
         try{
             householdService.deleteHousehold(id);
             return ResponseEntity.ok("Delete household : " + id);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllHousehold(){
+        try{
+
+            List<HouseHoldResponse> households = householdService.getALlHouseholds();
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_ALL_HOUSEHOLDS)
+                    .data(households)
+                    .build()
+            );
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

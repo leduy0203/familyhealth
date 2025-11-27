@@ -1,6 +1,7 @@
 package familyhealth.service;
 
 import familyhealth.model.Doctor;
+import familyhealth.model.Member;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
@@ -16,5 +17,6 @@ public interface IDoctorService {
     Doctor updateDoctor(Long id, DoctorDTO doctorDTO);
     void deleteDoctor(Long id);
 
+    List<Member> getPatients();
     PageResponse<List<DoctorDTO>> getAllDoctors(String[] search, Pageable pageable);
 }

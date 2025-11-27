@@ -128,4 +128,6 @@ public class MemberController {
             return ResponseEntity.status(404).body(e.getMessage());
         }
     }
+
+
 }

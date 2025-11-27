@@ -5,10 +5,13 @@ import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.HouseHoldMapper;
 import familyhealth.model.Household;
 import familyhealth.model.dto.HouseholdDTO;
+import familyhealth.model.dto.response.HouseHoldResponse;
 import familyhealth.repository.HouseholdRepository;
 import familyhealth.service.IHouseholdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +43,13 @@ public class HouseholdService implements IHouseholdService {
         Household existingHousehold = getHousehold(id);
         existingHousehold.setIsActive(false);
         householdRepository.save(existingHousehold);
+    }
+
+    @Override
+    public List<HouseHoldResponse> getALlHouseholds() {
+        return this.householdRepository.findAll()
+                .stream()
+                .map(HouseHoldMapper::toResponse)
+                .toList();
     }
 }

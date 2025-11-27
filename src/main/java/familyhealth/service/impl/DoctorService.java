@@ -6,16 +6,19 @@ import familyhealth.exception.ErrorCode;
 import familyhealth.mapper.DoctorMapper;
 import familyhealth.mapper.UserMapper;
 import familyhealth.model.Doctor;
+import familyhealth.model.Member;
 import familyhealth.model.Role;
 import familyhealth.model.dto.DoctorDTO;
 import familyhealth.model.dto.UserDTO;
 import familyhealth.model.dto.request.DoctorRegisterDTO;
 import familyhealth.model.dto.response.PageResponse;
+import familyhealth.repository.AppointmentRepository;
 import familyhealth.repository.DoctorRepository;
 import familyhealth.repository.RoleRepository;
 import familyhealth.repository.UserRepository;
 import familyhealth.repository.specification.DoctorSpecification;
 import familyhealth.service.IDoctorService;
+import familyhealth.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +43,7 @@ public class DoctorService implements IDoctorService {
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public Doctor getDoctor(Long id) {
@@ -72,6 +76,25 @@ public class DoctorService implements IDoctorService {
         Doctor doctor = getDoctor(id);
         DoctorMapper.mapDtoToEntity(doctorDTO, doctor);
         return doctorRepository.save(doctor);
+    }
+
+    @Override
+    public List<Member> getPatients() {
+
+        String currentPhone = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        User currentUser = userService.getUserByPhone(currentPhone);
+
+        List<Member> members = null;
+
+        if (currentUser.getDoctor() != null){
+            Long id = currentUser.getDoctor().getId();
+            members = appointmentRepository.findPatientsByDoctorId(id);
+        }
+
+        return members;
+
     }
 
     @Override

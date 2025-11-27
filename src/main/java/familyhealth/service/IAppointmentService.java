@@ -1,6 +1,7 @@
 package familyhealth.service;
 
 import familyhealth.model.Appointment;
+import familyhealth.model.Member;
 import familyhealth.model.dto.AppointmentDTO;
 import familyhealth.model.dto.request.ChangeStatusRequest;
 import familyhealth.model.dto.response.AppointmentResponse;

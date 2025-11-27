@@ -1,5 +1,6 @@
 package familyhealth.controller;
 
+import familyhealth.model.Member;
 import familyhealth.model.dto.response.AppointmentResponse;
 import familyhealth.utils.MessageKey;
 import familyhealth.mapper.DoctorMapper;
@@ -123,6 +124,24 @@ public class DoctorController {
         }
     }
 
+
+    @GetMapping("/doctor-patients")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public ResponseEntity<?> getPatients() {
+        try {
+
+            List<Member> members = this.doctorService.getPatients();
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_MEMBER_SUCCESS)
+                    .data(members)
+                    .build()
+            );
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
 }
