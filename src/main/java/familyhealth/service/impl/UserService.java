@@ -46,9 +46,8 @@ public class UserService implements IUserService {
     @Override
     public User getUser(Long id) {
         return this.userRepository.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
-
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -65,7 +64,7 @@ public class UserService implements IUserService {
 
         User userCreated = this.userRepository.save(user);
 
-        if (request.getMemberInfo() != null){
+        if (request.getMemberInfo() != null) {
             Household householdCreated = HouseHoldMapper.convertToHousehold(request);
             this.householdRepository.save(householdCreated);
 
@@ -77,7 +76,7 @@ public class UserService implements IUserService {
                 throw new AppException(ErrorCode.BHYT_EXISTED);
             }
 
-            Member newMember = MemberMapper.convertToMember(request ,householdCreated , userCreated);
+            Member newMember = MemberMapper.convertToMember(request, householdCreated, userCreated);
             if (newMember != null) {
 
                 Member member = this.memberRepository.save(newMember);
@@ -99,11 +98,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public PageResponse<List<UserResponse>> getAllUsers(String[] search,Pageable pageable) {
+    public PageResponse<List<UserResponse>> getAllUsers(String[] search, Pageable pageable) {
 
-//        Specification<User> spec = DoctorSpecification.fromSearchCriteria(search);
+        // Specification<User> spec = DoctorSpecification.fromSearchCriteria(search);
 
-        Page<User> userPage = userRepository.findAll( pageable);
+        Page<User> userPage = userRepository.findAll(pageable);
 
         List<UserResponse> userResponses = userPage.getContent().stream()
                 .map(UserMapper::convertToUserResponse)
@@ -128,102 +127,106 @@ public class UserService implements IUserService {
 
     }
 
-
-    //Tao user Doctor - chi Admin moi tao duoc
-//    @Override
-//    public User createUserDoctor(UserDTO userDTO, DoctorDTO doctorDTO) {
-//        User user = createUser(userDTO);
-//
-//        Doctor doctor = doctorService.createDoctor(doctorDTO, user);
-//
-//        user.setProfileId(doctor.getId());
-//        userRepository.save(user);
-//
-//        return user;
-//    }
-//
-//    //Tao user Member
-//    @Override
-//    public User createUserMember(UserDTO userDTO, MemberDTO memberDTO, Long householdId) {
-//        if (this.userRepository.existsByPhone(userDTO.getPhone())) {
-//            throw new AppException(ErrorCode.USER_EXISTED);
-//        }
-//        Role role = roleRepository.findById(userDTO.getRoleId())
-//                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-//        User user = UserMapper.convertToUser(userDTO, role);
-//        user = userRepository.save(user);
-//
-//        Household household;
-//        if (memberDTO.getRelation() == Relation.CHU_HO) {
-//            household = householdService.createHousehold(new HouseholdDTO());
-//            Member member = memberService.createMember(memberDTO, user, household);
-//            household.setHouseheadId(member.getId());
-//            household.setAddress(user.getAddress());
-//            member.setHousehold(household);
-//            memberRepository.save(member);
-//            user.setProfileId(member.getId());
-//        }
-//
-//        else {
-//            long count;
-//            household = householdService.getHousehold(householdId);
-//            User headmember = userRepository.findById(household.getHouseheadId())
-//                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-//            Member member = new Member();
-//            //Neu la Nam
-//            if(headmember.getGender() == Gender.MALE) {
-//                if (memberDTO.getRelation() == Relation.CHONG) {
-//                    throw new AppException(ErrorCode.MALE_CANNOT_HAVE_HUSBAND);//Sua EX
-//                } else if (memberDTO.getRelation() == Relation.VO && userDTO.getGender() == Gender.FEMALE) {
-//                    count = memberRepository.countByHouseholdIdAndRelation(householdId, Relation.VO);
-//                    if (count == 0) {
-//                        member = memberService.createMember(memberDTO, user, household);
-//                    } else {
-//                        throw new AppException(ErrorCode.ALREADY_HAS_WIFE);//Sua ex
-//                    }
-//                }
-//            }
-//            //Neu la Nu
-//            if (headmember.getGender() == Gender.FEMALE) {
-//                if(memberDTO.getRelation() == Relation.VO){
-//                    throw new AppException(ErrorCode.FEMALE_CANNOT_HAVE_WIFE);//Sua EX
-//                }
-//                else if (memberDTO.getRelation() == Relation.CHONG && userDTO.getGender() == Gender.MALE) {
-//                    count = memberRepository.countByHouseholdIdAndRelation(householdId, Relation.CHONG);
-//                    if (count == 0) {
-//                        member = memberService.createMember(memberDTO, user, household);
-//                    } else {
-//                        throw new AppException(ErrorCode.ALREADY_HAS_HUSBAND);//Sua ex
-//                    }
-//                }else {
-//                    throw new AppException(ErrorCode.ALREADY_HAS_HUSBAND);//Sua ex
-//                }
-//            }
-//            household.setQuantity(household.getQuantity() + 1);
-//            householdRepository.save(household);
-//            user.setProfileId(member.getId());
-//        }
-//        return userRepository.save(user);
-//    }
-//
-//
-//
-//    //Đăng nhập
-//    @Override
-//    public String login(String phoneNumber, String password) {
-//        return "";
-//    }
-//
-//    //Danh sách tài khoản
-//    @Override
-//    public List<User> getAllUsers() {
-//        return this.userRepository.findAll();
-//    }
-//
-//    //Cập nhật tài khaoản theo id
-//    @Override
-//    public User updateUser(Long id, UserDTO userDTO) {
-//        return null;
-//    }
-//
+    // Tao user Doctor - chi Admin moi tao duoc
+    // @Override
+    // public User createUserDoctor(UserDTO userDTO, DoctorDTO doctorDTO) {
+    // User user = createUser(userDTO);
+    //
+    // Doctor doctor = doctorService.createDoctor(doctorDTO, user);
+    //
+    // user.setProfileId(doctor.getId());
+    // userRepository.save(user);
+    //
+    // return user;
+    // }
+    //
+    // //Tao user Member
+    // @Override
+    // public User createUserMember(UserDTO userDTO, MemberDTO memberDTO, Long
+    // householdId) {
+    // if (this.userRepository.existsByPhone(userDTO.getPhone())) {
+    // throw new AppException(ErrorCode.USER_EXISTED);
+    // }
+    // Role role = roleRepository.findById(userDTO.getRoleId())
+    // .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+    // User user = UserMapper.convertToUser(userDTO, role);
+    // user = userRepository.save(user);
+    //
+    // Household household;
+    // if (memberDTO.getRelation() == Relation.CHU_HO) {
+    // household = householdService.createHousehold(new HouseholdDTO());
+    // Member member = memberService.createMember(memberDTO, user, household);
+    // household.setHouseheadId(member.getId());
+    // household.setAddress(user.getAddress());
+    // member.setHousehold(household);
+    // memberRepository.save(member);
+    // user.setProfileId(member.getId());
+    // }
+    //
+    // else {
+    // long count;
+    // household = householdService.getHousehold(householdId);
+    // User headmember = userRepository.findById(household.getHouseheadId())
+    // .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    // Member member = new Member();
+    // //Neu la Nam
+    // if(headmember.getGender() == Gender.MALE) {
+    // if (memberDTO.getRelation() == Relation.CHONG) {
+    // throw new AppException(ErrorCode.MALE_CANNOT_HAVE_HUSBAND);//Sua EX
+    // } else if (memberDTO.getRelation() == Relation.VO && userDTO.getGender() ==
+    // Gender.FEMALE) {
+    // count = memberRepository.countByHouseholdIdAndRelation(householdId,
+    // Relation.VO);
+    // if (count == 0) {
+    // member = memberService.createMember(memberDTO, user, household);
+    // } else {
+    // throw new AppException(ErrorCode.ALREADY_HAS_WIFE);//Sua ex
+    // }
+    // }
+    // }
+    // //Neu la Nu
+    // if (headmember.getGender() == Gender.FEMALE) {
+    // if(memberDTO.getRelation() == Relation.VO){
+    // throw new AppException(ErrorCode.FEMALE_CANNOT_HAVE_WIFE);//Sua EX
+    // }
+    // else if (memberDTO.getRelation() == Relation.CHONG && userDTO.getGender() ==
+    // Gender.MALE) {
+    // count = memberRepository.countByHouseholdIdAndRelation(householdId,
+    // Relation.CHONG);
+    // if (count == 0) {
+    // member = memberService.createMember(memberDTO, user, household);
+    // } else {
+    // throw new AppException(ErrorCode.ALREADY_HAS_HUSBAND);//Sua ex
+    // }
+    // }else {
+    // throw new AppException(ErrorCode.ALREADY_HAS_HUSBAND);//Sua ex
+    // }
+    // }
+    // household.setQuantity(household.getQuantity() + 1);
+    // householdRepository.save(household);
+    // user.setProfileId(member.getId());
+    // }
+    // return userRepository.save(user);
+    // }
+    //
+    //
+    //
+    // //Đăng nhập
+    // @Override
+    // public String login(String phoneNumber, String password) {
+    // return "";
+    // }
+    //
+    // //Danh sách tài khoản
+    // @Override
+    // public List<User> getAllUsers() {
+    // return this.userRepository.findAll();
+    // }
+    //
+    // //Cập nhật tài khaoản theo id
+    // @Override
+    // public User updateUser(Long id, UserDTO userDTO) {
+    // return null;
+    // }
+    //
 }

@@ -1,11 +1,9 @@
 package familyhealth.service;
 
-import familyhealth.model.dto.request.PaymentRequestDTO;
-import familyhealth.model.dto.response.PaymentResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface IMomopayService {
-    PaymentResponseDTO createPayment(PaymentRequestDTO requestDTO, HttpServletRequest request);
+    String createPayment(long amount, String orderId, String orderInfo) throws Exception;
 
-    boolean validateCallbackSignature(HttpServletRequest request);
+    String handlePaymentResponse(HttpServletRequest request);
 }
