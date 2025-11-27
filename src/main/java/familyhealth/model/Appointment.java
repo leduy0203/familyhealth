@@ -34,7 +34,7 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @OneToOne()
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 

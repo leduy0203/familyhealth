@@ -31,7 +31,9 @@ public enum ErrorCode {
     IDCARD_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
     BHYT_EXISTED(400,"Phone already existed" , HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_HEAD_OF_HOUSEHOLD(400,"Cannot delete head of household" , HttpStatus.BAD_REQUEST),
-    INVALID_APPOINTMENT_STATUS(400,"Status not existed" , HttpStatus.BAD_REQUEST);
+    INVALID_APPOINTMENT_STATUS(400,"Status not existed" , HttpStatus.BAD_REQUEST),
+    REPORT_GENERATION_ERROR(500, "Error generating report", HttpStatus.INTERNAL_SERVER_ERROR),
+    REPORT_NOT_FOUND(404, "Report file not found", HttpStatus.NOT_FOUND);
 //    ALREADY_HAS_WIFE(400, "Household already has a wife/ Member not a female", HttpStatus.BAD_REQUEST),
 //    ALREADY_HAS_HUSBAND(400, "Household already has a husband/ Member not a male", HttpStatus.BAD_REQUEST),
 //    MALE_CANNOT_HAVE_HUSBAND(400, "Male household head cannot have a husband", HttpStatus.BAD_REQUEST),

@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import familyhealth.common.Relation;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -36,4 +39,8 @@ public class Member extends Person{
 
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus = MemberStatus.ACTIVE;
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<Appointment> appointments;
 }

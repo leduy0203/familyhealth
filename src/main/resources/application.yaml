@@ -21,7 +21,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
 jwt:
   expiration: 2592000
@@ -62,5 +62,9 @@ openapi:
     title: Familyhealth API Documentation
     version: v1.1.0
     serverUrl: http://localhost:${server.port}/familyhealth
+
+report:
+  output:
+    directory: d:/reports
 
 

@@ -1,5 +1,6 @@
 package familyhealth.controller;
 
+import familyhealth.model.dto.response.MemberResponse;
 import familyhealth.utils.MessageKey;
 import familyhealth.model.Member;
 import familyhealth.model.dto.MemberDTO;
@@ -32,6 +33,23 @@ public class MemberController {
         try{
 
             Member member = memberService.getMember(id);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .code(OK.value())
+                    .message(MessageKey.GET_MEMBER_SUCCESS)
+                    .data(member)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/members-medicalRecord/{id}")
+    public ResponseEntity<?> getMemberDetail(@PathVariable Long id){
+        try{
+
+            MemberResponse member = this.memberService.getMemberDetail(id);
 
             return ResponseEntity.ok(ApiResponse.builder()
                     .code(OK.value())

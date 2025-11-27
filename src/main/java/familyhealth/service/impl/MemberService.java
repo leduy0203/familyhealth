@@ -12,6 +12,7 @@ import familyhealth.model.Role;
 import familyhealth.model.User;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.request.MemberRegisterDTO;
+import familyhealth.model.dto.response.MemberResponse;
 import familyhealth.model.dto.response.PageResponse;
 import familyhealth.model.dto.response.UserResponse;
 import familyhealth.repository.MemberRepository;
@@ -71,6 +72,12 @@ public class MemberService implements IMemberService {
                 .meta(meta)
                 .result(members.getContent())
                 .build();
+    }
+
+    @Override
+    public MemberResponse getMemberDetail(Long id) {
+        return MemberMapper.convertToMemberResponse(this.memberRepository.findMemberWithMedicalRecordById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.MEMBER_NOT_FOUND))) ;
     }
 
     @Override

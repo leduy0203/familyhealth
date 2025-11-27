@@ -3,6 +3,7 @@ package familyhealth.service;
 import familyhealth.model.Member;
 import familyhealth.model.dto.MemberDTO;
 import familyhealth.model.dto.request.MemberRegisterDTO;
+import familyhealth.model.dto.response.MemberResponse;
 import familyhealth.model.dto.response.PageResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -15,4 +16,6 @@ public interface IMemberService {
         void deleteMember(Long id);
         PageResponse<List<Member>> getFamilyMembers(String[] search,
                                               Pageable pageable);
+
+        MemberResponse getMemberDetail(Long id);
 }
