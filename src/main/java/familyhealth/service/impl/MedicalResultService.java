@@ -8,16 +8,20 @@ import familyhealth.model.Appointment;
 import familyhealth.model.MedicalResult;
 import familyhealth.model.dto.MedicalResultDTO;
 import familyhealth.repository.MedicalResultRepository;
+import familyhealth.service.IEmailService;
 import familyhealth.service.IMedicalResultService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MedicalResultService implements IMedicalResultService {
     private final MedicalResultRepository medicalResultRepository;
     private final AppointmentService appointmentService;
+    private final IEmailService emailService;
 
     @Override
     public MedicalResult getMedicalResult(Long id) {
@@ -35,7 +39,13 @@ public class MedicalResultService implements IMedicalResultService {
 
         MedicalResult medicalResult = MedicalResultMapper.convertToMedicalResult(medicalResultDTO,appointment);
 
-        return medicalResultRepository.save(medicalResult);
+        MedicalResult savedResult = medicalResultRepository.save(medicalResult);
+        
+        // Gửi email thông báo kết quả khám bệnh (async)
+        log.info("Sending medical result email to member: {}", appointment.getMember().getFullname());
+        emailService.sendMedicalResultEmail(savedResult);
+
+        return savedResult;
     }
 
     @Override

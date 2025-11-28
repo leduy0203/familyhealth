@@ -6,12 +6,14 @@ spring:
 
   ai:
     openai:
-      api-key: AIzaSyAmYgRbDrp8PtYdrMPoF2CrE7DRmx4Gf0M
+      api-key: AIzaSyDpKnVSw81CInbFmXqmwLCLHTsR43gVW9Q
       chat:
         base-url: https://generativelanguage.googleapis.com
         completions-path: /v1beta/openai/chat/completions
         options:
           model: gemini-2.0-flash
+          temperature: 0.5
+          max-tokens: 1000
       embedding:
         enabled: false
 
@@ -21,7 +23,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
   batch:
     job:
@@ -80,5 +82,22 @@ report:
 batch:
   export:
     directory: D:/exports
+
+# Email Configuration (Gmail)
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: dyyproa4@gmail.com       # ← ĐỔI thành email Gmail đã tạo App Password
+  password: vuqgwbrjrtlfzkds            # App Password (bỏ dấu cách)
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
 
 

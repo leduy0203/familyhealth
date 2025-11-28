@@ -27,7 +27,7 @@ public class HealthAdvisorService implements IHealthAdvisorService {
     private final VectorStore vectorStore;
     
     private static final String COMBINED_CONSULTATION_TEMPLATE = """
-            Bạn là bác sĩ tư vấn chuyên nghiệp. Hãy phân tích tình trạng của bệnh nhân và đưa ra tư vấn bằng tiếng Việt.
+            Bạn là bác sĩ tư vấn chuyên nghiệp với nhiều năm kinh nghiệm. Hãy phân tích kỹ lưỡng tình trạng của bệnh nhân và đưa ra tư vấn chi tiết bằng tiếng Việt.
             
             Thông tin bệnh nhân:
             - Triệu chứng: {symptoms}
@@ -39,15 +39,21 @@ public class HealthAdvisorService implements IHealthAdvisorService {
             {doctorContext}
             
             Yêu cầu:
-            1. Viết lời khuyên ngắn gọn, dễ hiểu, KHÔNG dùng markdown (*, **, #, bullets)
-            2. Viết thành đoạn văn tự nhiên, như đang nói chuyện trực tiếp
-            3. Tối đa 3-4 câu ngắn gọn về triệu chứng và cách xử lý
+            1. Viết lời khuyên CHI TIẾT, DỄ HIỂU, KHÔNG dùng markdown (*, **, #, bullets)
+            2. Viết thành đoạn văn tự nhiên, như đang tư vấn trực tiếp cho bệnh nhân
+            3. Phân tích ít nhất 5-8 câu về:
+               - Nguyên nhân có thể gây ra triệu chứng
+               - Các biện pháp chăm sóc tại nhà cụ thể
+               - Dấu hiệu cảnh báo cần đi khám ngay
+               - Lời khuyên về chế độ ăn uống, sinh hoạt
+               - Thời gian theo dõi và khi nào cần tái khám
             4. KHÔNG hỏi lại thông tin bệnh nhân
-            5. KHÔNG liệt kê danh sách gạch đầu dòng
+            5. KHÔNG liệt kê danh sách gạch đầu dòng, viết thành đoạn văn
+            6. Sử dụng ngôn ngữ thân thiện, dễ hiểu nhưng chuyên nghiệp
             
             Trả về dưới dạng JSON:
             {{
-              "advice": "lời khuyên ngắn gọn bằng văn xuôi, không có ký tự markdown",
+              "advice": "lời khuyên chi tiết 5-8 câu bằng văn xuôi, không có ký tự markdown",
               "severity": "LOW|MEDIUM|HIGH",
               "recommendedAction": "REST|HOME_CARE|SEE_DOCTOR|EMERGENCY",
               "requiresDoctor": true/false,
@@ -56,7 +62,7 @@ public class HealthAdvisorService implements IHealthAdvisorService {
               ]
             }}
             
-            Ví dụ advice tốt: "Triệu chứng đau đầu và buồn nôn có thể do nhiều nguyên nhân như căng thẳng, mất ngủ hoặc vấn đề tiêu hóa. Bạn nên nghỉ ngơi trong phòng tối, uống nhiều nước và tránh ánh sáng chói. Nếu tình trạng không cải thiện sau 24 giờ hoặc có thêm triệu chứng như sốt cao, đau dữ dội, hãy đến bệnh viện ngay."
+            Ví dụ advice tốt: "Triệu chứng đau đầu và buồn nôn mà bạn đang gặp có thể do nhiều nguyên nhân khác nhau. Các nguyên nhân phổ biến bao gồm căng thẳng stress, thiếu ngủ, hoặc có thể là dấu hiệu của vấn đề tiêu hóa hoặc huyết áp. Với triệu chứng này, tôi khuyên bạn nên nghỉ ngơi trong phòng tối, yên tĩnh, tránh ánh sáng chói và tiếng ồn. Hãy uống nhiều nước lọc, ít nhất 2 lít mỗi ngày, và ăn những bữa ăn nhẹ, dễ tiêu như cháo hoặc súp. Bạn có thể chườm khăn ấm lên trán và massage nhẹ vùng thái dương để giảm đau. Tránh sử dụng điện thoại, máy tính và các thiết bị điện tử trong 2-3 tiếng đầu. Nếu sau 24 giờ tình trạng không thuyên giảm, hoặc nếu xuất hiện các triệu chứng nghiêm trọng hơn như đau đầu dữ dội đột ngột, sốt cao trên 39 độ, buồn nôn kèm lú lẫn hoặc co giật, bạn cần đến bệnh viện ngay lập tức để được kiểm tra kỹ hơn."
             """;
     
     @Override
@@ -64,13 +70,23 @@ public class HealthAdvisorService implements IHealthAdvisorService {
         log.info("Providing health consultation for: {}", request.getSymptoms());
         
         try {
-            // Step 1: Vector search for relevant doctors (lower threshold for better matching)
+            // Step 1: Vector search for relevant doctors
+            // Không dùng similarity threshold để luôn trả về bác sĩ
             SearchRequest searchRequest = SearchRequest.query(request.getSymptoms())
-                    .withTopK(5)
-                    .withSimilarityThreshold(0.3); // Giảm từ 0.5 xuống 0.3 để dễ match hơn
+                    .withTopK(5);
             
             List<Document> similarDoctors = vectorStore.similaritySearch(searchRequest);
-            log.info("Found {} doctors from vector search", similarDoctors.size());
+            log.info("Found {} doctors from vector search for symptoms: {}", similarDoctors.size(), request.getSymptoms());
+            
+            if (similarDoctors.isEmpty()) {
+                log.warn("No doctors found! Vector store might be empty. Checking...");
+                // Thử search với query rỗng để kiểm tra vector store
+                SearchRequest checkRequest = SearchRequest.query("bác sĩ doctor").withTopK(10);
+                List<Document> allDocs = vectorStore.similaritySearch(checkRequest);
+                log.info("Total documents in vector store: {}", allDocs.size());
+                similarDoctors = allDocs;
+            }
+            
             similarDoctors.forEach(doc -> log.info("Doctor: {}, Expertise: {}", 
                     doc.getMetadata().get("fullname"), doc.getMetadata().get("expertise")));
             
@@ -127,23 +143,30 @@ public class HealthAdvisorService implements IHealthAdvisorService {
             jsonResponse = jsonResponse.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
             
             log.info("Parsing JSON response for doctors");
+            log.info("Raw JSON response: {}", jsonResponse);
             
             // Extract advice fields
             String advice = extractJsonField(jsonResponse, "advice");
             String severity = extractJsonField(jsonResponse, "severity");
             String recommendedAction = extractJsonField(jsonResponse, "recommendedAction");
             
-            // Fix: Check for both "true" string and boolean pattern
-            boolean requiresDoctor = jsonResponse.contains("\"requiresDoctor\"") && 
-                    (jsonResponse.contains(": true") || jsonResponse.contains(":true") || 
-                     jsonResponse.contains("\"requiresDoctor\": true") || jsonResponse.contains("\"requiresDoctor\":true"));
+            // Fix: Better parsing for requiresDoctor boolean
+            boolean requiresDoctor = false;
+            java.util.regex.Pattern requiresDoctorPattern = java.util.regex.Pattern.compile(
+                    "\"requiresDoctor\"\\s*:\\s*(true|false)", java.util.regex.Pattern.CASE_INSENSITIVE);
+            java.util.regex.Matcher requiresDoctorMatcher = requiresDoctorPattern.matcher(jsonResponse);
+            if (requiresDoctorMatcher.find()) {
+                requiresDoctor = "true".equalsIgnoreCase(requiresDoctorMatcher.group(1));
+            }
             
             log.info("requiresDoctor from AI: {}, documents size: {}", requiresDoctor, documents.size());
             
             // Extract or create doctor recommendations
             List<HealthAdviceResponse.RecommendedDoctor> recommendedDoctors = new ArrayList<>();
             
-            if (requiresDoctor && !documents.isEmpty()) {
+            // LUÔN thêm bác sĩ nếu có documents, không chỉ khi requiresDoctor = true
+            // Vì AI có thể không trả về đúng requiresDoctor
+            if (!documents.isEmpty()) {
                 log.info("Creating doctor recommendations from {} documents", documents.size());
                 recommendedDoctors = documents.stream()
                         .limit(3)
@@ -160,6 +183,8 @@ public class HealthAdvisorService implements IHealthAdvisorService {
                                     .build();
                         })
                         .collect(Collectors.toList());
+                // Nếu có bác sĩ phù hợp, set requiresDoctor = true
+                requiresDoctor = true;
             }
             
             log.info("Final recommendedDoctors count: {}", recommendedDoctors.size());
