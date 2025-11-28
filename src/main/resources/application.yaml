@@ -21,8 +21,18 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
+  batch:
+    job:
+      enabled: false  # Disable auto-run batch jobs on startup
+    jdbc:
+      initialize-schema: always
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure: ERROR  # Hide auto-configuration report
+    org.springframework.boot.autoconfigure.condition: ERROR  # Hide condition evaluation report
 jwt:
   expiration: 2592000
   secretKey: NoGqvbiTkYcVvArxFI36DjCPjgQOIFo/962T4QO3fm8=
@@ -65,6 +75,10 @@ openapi:
 
 report:
   output:
-    directory: d:/reports
+    directory: D:/reports
+
+batch:
+  export:
+    directory: D:/exports
 
 
